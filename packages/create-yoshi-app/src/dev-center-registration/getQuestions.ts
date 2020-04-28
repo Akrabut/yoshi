@@ -1,6 +1,6 @@
-// import openBrowser from 'react-dev-utils/openBrowser';
+import { capitalize } from 'lodash';
 import { ExtendedPromptObject } from './extended-prompts';
-import { createApp, createComponent, getApps } from './appService';
+import { createApp, createComponent, getApps, getApp } from './appService';
 
 const WILL_REGISTER = 2;
 const WAS_REGISTERED = 1;
@@ -49,8 +49,8 @@ export default (): Array<ExtendedPromptObject<string>> => {
               name: 'registerComponentType',
               message: 'Register a component',
               choices: [
-                { title: 'Register new Widget', value: WIDGET_OUT_OF_IFRAME },
-                { title: 'Register new Page', value: PAGE_OUT_OF_IFRAME },
+                { title: 'Register a Widget', value: WIDGET_OUT_OF_IFRAME },
+                { title: 'Register a Page', value: PAGE_OUT_OF_IFRAME },
                 {
                   title: 'Finish registration',
                   value: null,
@@ -65,6 +65,11 @@ export default (): Array<ExtendedPromptObject<string>> => {
                     {
                       type: 'text',
                       name: 'componentName',
+                      format: val =>
+                        val
+                          .split(/\s|-/)
+                          .map(capitalize)
+                          .join(''),
                       async after(answers) {
                         if (!answers.components) {
                           answers.components = [];
@@ -95,8 +100,18 @@ export default (): Array<ExtendedPromptObject<string>> => {
               type: 'select',
               name: 'appId',
               message: 'Pick the app you want to use',
+              optionsPerPage: 8,
               async before(answers, context) {
                 context.apps = await getApps();
+              },
+              async after(answers) {
+                const app = await getApp(answers.appId);
+                if (!answers.components) {
+                  answers.components = [];
+                }
+                answers.appName = app.name;
+                answers.components = answers.components.concat(app.components);
+                return answers;
               },
               async getDynamicChoices(answers, context) {
                 return context.apps.map(formatAppOption);

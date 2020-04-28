@@ -16701,7 +16701,7 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
-kleur@3.0.3, kleur@^3.0.0, kleur@^3.0.3:
+kleur@3.0.3, kleur@^3.0.3:
   version "3.0.3"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha1-p5yezIbuHOP6YgbRIWxQHxR/wH4=
@@ -21363,15 +21363,7 @@ prompts@^0.1.8:
     kleur "^2.0.1"
     sisteransi "^0.1.1"
 
-prompts@^1.1.1:
-  version "1.2.1"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/prompts/-/prompts-1.2.1.tgz#7fd4116a458d6a62761e3ccb1432d7bbd8b2cb29"
-  integrity sha1-f9QRakWNamJ2HjzLFDLXu9iyyyk=
-  dependencies:
-    kleur "^3.0.0"
-    sisteransi "^1.0.0"
-
-prompts@^2.0.1, prompts@^2.0.4, prompts@^2.3.0:
+prompts@^2.0.1, prompts@^2.0.4, prompts@^2.3.0, prompts@^2.3.2:
   version "2.3.2"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/prompts/-/prompts-2.3.2.tgz#480572d89ecf39566d2bd3fe2c9fccb7c4c0b068"
   integrity sha1-SAVy2J7POVZtK9P+LJ/Mt8TAsGg=
@@ -23839,7 +23831,7 @@ sisteransi@^0.1.1:
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/sisteransi/-/sisteransi-0.1.1.tgz#5431447d5f7d1675aac667ccd0b865a4994cb3ce"
   integrity sha1-VDFEfV99FnWqxmfM0LhlpJlMs84=
 
-sisteransi@^1.0.0, sisteransi@^1.0.4:
+sisteransi@^1.0.4:
   version "1.0.5"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
   integrity sha1-E01oEpd1ZDfMBcoBNw06elcQde0=

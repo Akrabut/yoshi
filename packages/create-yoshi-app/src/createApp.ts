@@ -11,6 +11,7 @@ import runDevCenterRegistrationPrompt from './dev-center-registration/runPrompt'
 import runPrompt from './runPrompt';
 import generateProject from './generateProject';
 import TemplateModel from './TemplateModel';
+import DevCenterTemplateModel from './dev-center-registration/TemplateModel';
 
 export interface CreateAppOptions {
   workingDir: string;
@@ -42,7 +43,7 @@ export default async ({
 
   if (templateModel.templateDefinition.name === 'flow-editor') {
     const devCenterModel = await runDevCenterRegistrationPrompt(templateModel);
-    console.log(devCenterModel);
+    templateModel.setFlowData<DevCenterTemplateModel>(devCenterModel);
   }
 
   console.log(

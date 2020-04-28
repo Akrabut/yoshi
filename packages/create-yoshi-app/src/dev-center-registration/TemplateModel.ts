@@ -1,13 +1,9 @@
-export interface DevCenterComponentModel {
-  name: string;
-  id: string;
-  type: string;
-}
+import { DevCenterComponent } from './appService';
 
 export default class TemplateModel {
   readonly appDefinitionId: string;
   readonly appName: string;
-  readonly components: Array<DevCenterComponentModel>;
+  readonly components: Array<DevCenterComponent>;
 
   constructor({
     appId,
@@ -16,7 +12,7 @@ export default class TemplateModel {
   }: {
     appId: string;
     appName: string;
-    components: Array<DevCenterComponentModel>;
+    components: Array<DevCenterComponent>;
   }) {
     this.appDefinitionId = appId;
     this.appName = appName;

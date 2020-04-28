@@ -2,7 +2,6 @@ import prompts, { PromptObject, Answers, Choice } from 'prompts';
 
 export interface ExtendedPromptObject<T extends string>
   extends PromptObject<T> {
-  // shouldTerminate?: (answers: Answers<string>) => boolean;
   before?: <C extends any>(
     answers: Answers<string>,
     context: C,
@@ -28,7 +27,6 @@ const promptifyQuestion = (
   question: ExtendedPromptObject<string>,
 ): PromptObject<string> => {
   const promptifiedQuestion = { ...question };
-  // delete promptifiedQuestion.shouldTerminate;
   delete promptifiedQuestion.before;
   delete promptifiedQuestion.after;
   delete promptifiedQuestion.next;
@@ -81,7 +79,6 @@ async function run<T>(
       answers = { ...answers, ...nextAnswers };
     }
   }
-  // console.log(answers, 'answers');
   return answers;
 }
 

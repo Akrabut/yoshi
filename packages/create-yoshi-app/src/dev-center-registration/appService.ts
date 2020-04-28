@@ -7,6 +7,36 @@ const getUrl = (path: string): string => {
   return `https://www.wix.com/_api/app-service/v1/${path}`;
 };
 
+interface DevCenterResponseApp {
+  appId: string;
+  name: string;
+  components: Array<DevCenterResponseComponent>;
+}
+export interface DevCenterApp {
+  appId: string;
+  components: Array<DevCenterComponent>;
+  name: string;
+}
+
+interface DevCenterResponseComponent {
+  compId: string;
+  compName: string;
+  compType: string;
+}
+export interface DevCenterComponent {
+  id: string;
+  type: string;
+  name: string;
+}
+
+const formatComponent = (
+  component: DevCenterResponseComponent,
+): DevCenterComponent => ({
+  name: component.compName,
+  type: component.compType,
+  id: component.compId,
+});
+
 export const createApp = (name: string): Promise<{ appId: string }> => {
   return axios
     .post<{ appId: string }>(getUrl('apps'), {
@@ -21,6 +51,16 @@ export const getApps = (): Promise<Array<{ appId: string }>> => {
     .then(res => res.data.apps);
 };
 
+export const getApp = (appId: string): Promise<DevCenterApp> => {
+  return axios
+    .get<DevCenterResponseApp>(getUrl(`apps/${appId}`))
+    .then(({ data }) => ({
+      name: data.name,
+      appId: data.appId,
+      components: data.components.map(formatComponent),
+    }));
+};
+
 export const createComponent = ({
   name,
   appId,
@@ -29,12 +69,15 @@ export const createComponent = ({
   name: string;
   appId: string;
   type: string;
-}): Promise<{ id: string; type: string; name: string }> => {
+}): Promise<DevCenterComponent> => {
   return axios
-    .post<{ compId: string }>(getUrl(`apps/${appId}/components`), {
-      compName: name,
-      compType: type,
-    })
+    .post<{ compId: string }, { data: DevCenterResponseComponent }>(
+      getUrl(`apps/${appId}/components`),
+      {
+        compName: name,
+        compType: type,
+      },
+    )
     .then(res => ({
       id: res.data.compId,
       type,

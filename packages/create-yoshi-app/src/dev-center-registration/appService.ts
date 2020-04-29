@@ -65,10 +65,12 @@ export const createComponent = ({
   name,
   appId,
   type,
+  data,
 }: {
   name: string;
   appId: string;
   type: string;
+  data?: Record<string, any>;
 }): Promise<DevCenterComponent> => {
   return axios
     .post<{ compId: string }, { data: DevCenterResponseComponent }>(
@@ -76,6 +78,7 @@ export const createComponent = ({
       {
         compName: name,
         compType: type,
+        compData: data,
       },
     )
     .then(res => ({

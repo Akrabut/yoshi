@@ -12,6 +12,7 @@ const WILL_REGISTER = 2;
 const WAS_REGISTERED = 1;
 const WIDGET_OUT_OF_IFRAME = 'WIDGET_OUT_OF_IFRAME';
 const PAGE_OUT_OF_IFRAME = 'PAGE_OUT_OF_IFRAME';
+const PLATFORM = 'PLATFORM';
 const WIDGET_IFRAME = 'WIDGET';
 const PAGE_IFRAME = 'PAGE';
 
@@ -23,6 +24,71 @@ const formatAppOption = (app: {
     title: app.name,
     value: app.appId,
   };
+};
+
+const getBaseUrl = (projectName: string) =>
+  `https://static.parastorage.com/services/${projectName}/1.0.0`;
+
+const generateComponentData = (projectName: string, componentName: string) => {
+  const baseUrl = getBaseUrl(projectName);
+
+  return {
+    componentUrl: `${baseUrl}/${componentName}ViewerWidget.bundle.min.js`,
+    widgetData: {
+      addOnlyOnce: false,
+      default: true,
+      essential: false,
+      position: {
+        region: 'no_region',
+      },
+      settingsEndpointUrl: `${baseUrl}/settings/${componentName}.html`,
+      widgetEndpointUrl: `${baseUrl}/editor/${componentName}.html`,
+      widgetMobileEndpointUrl: `${baseUrl}/editor/${componentName}.html`,
+      widgetWidthType: 'NONE_TYPE',
+    },
+  };
+};
+
+const generateViewerScriptData = (projectName: string) => {
+  const baseUrl = getBaseUrl(projectName);
+  return {
+    viewerScriptUrl: `${baseUrl}/viewerScript.bundle.min.js`,
+    editorScriptUrl: `${baseUrl}/editorScript.bundle.min.js`,
+    platformOnly: false,
+    enableInEditor: false,
+    baseUrls: {
+      staticsBaseUrl: baseUrl,
+      staticsEditorBaseUrl: baseUrl,
+    },
+  };
+};
+
+const getDataForComponent = (
+  data: any,
+  type:
+    | typeof WIDGET_OUT_OF_IFRAME
+    | typeof PAGE_OUT_OF_IFRAME
+    | typeof PLATFORM,
+) => {
+  if (!data) {
+    return undefined;
+  }
+
+  if (type === WIDGET_OUT_OF_IFRAME) {
+    return {
+      widgetOutOfIframeData: data,
+      compType: type,
+    };
+  } else if (type === PAGE_OUT_OF_IFRAME) {
+    return {
+      pageOutOfIframeData: data,
+      compType: type,
+    };
+  } else if (type === PLATFORM) {
+    return {
+      platformComponentData: data,
+    };
+  }
 };
 
 // We want to handle iframe widgets for cases when users want to migrate their components
@@ -88,15 +154,34 @@ export default (): Array<ExtendedPromptObject<string>> => {
                           .split(/\s|-/)
                           .map(capitalize)
                           .join(''),
-                      async after(answers) {
+                      async after(answers, context) {
                         if (!answers.components) {
                           answers.components = [];
                         }
-                        answers.components.push(
+                        if (!context.isViewerScriptRegistered) {
+                          await createComponent({
+                            name: 'Platform',
+                            appId: answers.appId,
+                            type: PLATFORM,
+                            data: getDataForComponent(
+                              generateViewerScriptData(context.projectName),
+                              PLATFORM,
+                            ),
+                          });
+                          context.isViewerScriptRegistered = true;
+                        }
+                        answers.components = answers.components.concat(
                           await createComponent({
                             name: answers.componentName,
                             appId: answers.appId,
                             type: answers.registerComponentType,
+                            data: getDataForComponent(
+                              generateComponentData(
+                                context.projectName,
+                                answers.componentName,
+                              ),
+                              answers.registerComponentType,
+                            ),
                           }),
                         );
                         return answers;
@@ -104,7 +189,11 @@ export default (): Array<ExtendedPromptObject<string>> => {
                       validate(value: string) {
                         return !!value;
                       },
-                      message: 'Name of the component:',
+                      message: `${
+                        answers.registerComponentType === WIDGET_OUT_OF_IFRAME
+                          ? 'Widget'
+                          : 'Page'
+                      } name`,
                     },
                   ];
                 }

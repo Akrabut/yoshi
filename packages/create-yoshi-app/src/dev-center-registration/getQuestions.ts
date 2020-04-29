@@ -1,11 +1,19 @@
 import { capitalize } from 'lodash';
 import { ExtendedPromptObject } from './extended-prompts';
-import { createApp, createComponent, getApps, getApp } from './appService';
+import {
+  createApp,
+  createComponent,
+  getApps,
+  getApp,
+  DevCenterComponent,
+} from './appService';
 
 const WILL_REGISTER = 2;
 const WAS_REGISTERED = 1;
 const WIDGET_OUT_OF_IFRAME = 'WIDGET_OUT_OF_IFRAME';
 const PAGE_OUT_OF_IFRAME = 'PAGE_OUT_OF_IFRAME';
+const WIDGET_IFRAME = 'WIDGET';
+const PAGE_IFRAME = 'PAGE';
 
 const formatAppOption = (app: {
   name: string;
@@ -16,6 +24,16 @@ const formatAppOption = (app: {
     value: app.appId,
   };
 };
+
+// We want to handle iframe widgets for cases when users want to migrate their components
+const SUPPORTED_TYPES = [
+  WIDGET_OUT_OF_IFRAME,
+  PAGE_OUT_OF_IFRAME,
+  WIDGET_IFRAME,
+  PAGE_IFRAME,
+];
+const isSupportedComponentType = (component: DevCenterComponent) =>
+  SUPPORTED_TYPES.includes(component.type);
 
 export default (): Array<ExtendedPromptObject<string>> => {
   return [
@@ -97,7 +115,7 @@ export default (): Array<ExtendedPromptObject<string>> => {
         } else if (answers.appRegistrationState === WAS_REGISTERED) {
           return [
             {
-              type: 'select',
+              type: 'autocomplete',
               name: 'appId',
               message: 'Pick the app you want to use',
               optionsPerPage: 8,
@@ -110,7 +128,9 @@ export default (): Array<ExtendedPromptObject<string>> => {
                   answers.components = [];
                 }
                 answers.appName = app.name;
-                answers.components = answers.components.concat(app.components);
+                answers.components = answers.components.concat(
+                  app.components.filter(isSupportedComponentType),
+                );
                 return answers;
               },
               async getDynamicChoices(answers, context) {

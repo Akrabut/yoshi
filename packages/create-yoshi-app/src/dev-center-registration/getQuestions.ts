@@ -26,14 +26,15 @@ const formatAppOption = (app: {
   };
 };
 
-const formatComponentOption = (component: {
-  name: string;
-  id: string;
-}): { title: string; value: string; selected: boolean } => {
+const formatComponentOption = (
+  component: DevCenterComponent,
+): { title: string; value: string; selected: boolean; disabled: boolean } => {
+  const isSupported = isSupportedComponentType(component);
   return {
     title: component.name,
     value: component.id,
-    selected: true,
+    selected: isSupported,
+    disabled: !isSupported,
   };
 };
 
@@ -266,11 +267,10 @@ export default (): Array<ExtendedPromptObject<string>> => {
                 return answers;
               },
               hint: '- Space to select. Return to submit',
+              warn: "This type of component can't be imported",
               async getDynamicChoices(answers, context) {
                 const { app } = context;
-                const components = app.components.filter(
-                  isSupportedComponentType,
-                );
+                const components = app.components;
                 return components.map(formatComponentOption);
               },
             },

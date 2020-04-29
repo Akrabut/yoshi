@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { ExperimentsProvider } from '@wix/wix-experiments-react';
-import { Widget } from './Widget';
+import Widget from '.';
 
 describe('Widget', () => {
   it('should render a title correctly', async () => {

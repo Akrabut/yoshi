@@ -26,6 +26,20 @@ const formatAppOption = (app: {
   };
 };
 
+const formatComponentOption = (component: {
+  name: string;
+  id: string;
+}): { title: string; value: string; selected: boolean } => {
+  return {
+    title: component.name,
+    value: component.id,
+    selected: true,
+  };
+};
+
+const wasSelected = (ids: Array<string>) => (component: DevCenterComponent) =>
+  ids.includes(component.id);
+
 const getBaseUrl = (projectName: string) =>
   `https://static.parastorage.com/services/${projectName}/1.0.0`;
 
@@ -101,6 +115,15 @@ const SUPPORTED_TYPES = [
 const isSupportedComponentType = (component: DevCenterComponent) =>
   SUPPORTED_TYPES.includes(component.type);
 
+const convertToOOIComponent = (component: DevCenterComponent) => {
+  if (component.type === WIDGET_IFRAME) {
+    component.type = WIDGET_OUT_OF_IFRAME;
+  } else if (component.type === PAGE_OUT_OF_IFRAME) {
+    component.type = PAGE_OUT_OF_IFRAME;
+  }
+  return component;
+};
+
 export default (): Array<ExtendedPromptObject<string>> => {
   return [
     {
@@ -149,11 +172,7 @@ export default (): Array<ExtendedPromptObject<string>> => {
                     {
                       type: 'text',
                       name: 'componentName',
-                      format: val =>
-                        val
-                          .split(/\s|-/)
-                          .map(capitalize)
-                          .join(''),
+                      format: val => val.split(/\s|-/).join(''),
                       async after(answers, context) {
                         if (!answers.components) {
                           answers.components = [];
@@ -211,19 +230,48 @@ export default (): Array<ExtendedPromptObject<string>> => {
               async before(answers, context) {
                 context.apps = await getApps();
               },
-              async after(answers) {
-                const app = await getApp(answers.appId);
+              // async after(answers) {
+              //   const app = await getApp(answers.appId);
+              //   if (!answers.components) {
+              //     answers.components = [];
+              //   }
+              //   answers.appName = app.name;
+              //   answers.components = answers.components.concat(
+              //     app.components.filter(isSupportedComponentType),
+              //   );
+              //   return answers;
+              // },
+              async getDynamicChoices(answers, context) {
+                return context.apps.map(formatAppOption);
+              },
+            },
+            {
+              type: 'multiselect',
+              name: 'selectedComponents',
+              message: 'Select components you want to migrate',
+              async before(answers, context) {
+                context.app = await getApp(answers.appId);
+                answers.appName = context.app.name;
+              },
+              async after(answers, context) {
+                const { app } = context;
                 if (!answers.components) {
                   answers.components = [];
                 }
-                answers.appName = app.name;
                 answers.components = answers.components.concat(
-                  app.components.filter(isSupportedComponentType),
+                  app.components
+                    .filter(wasSelected(answers.selectedComponents))
+                    .map(convertToOOIComponent),
                 );
                 return answers;
               },
+              hint: '- Space to select. Return to submit',
               async getDynamicChoices(answers, context) {
-                return context.apps.map(formatAppOption);
+                const { app } = context;
+                const components = app.components.filter(
+                  isSupportedComponentType,
+                );
+                return components.map(formatComponentOption);
               },
             },
           ];

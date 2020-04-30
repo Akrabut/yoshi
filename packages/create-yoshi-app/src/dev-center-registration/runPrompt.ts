@@ -13,8 +13,8 @@ export default async (
   if (instance) {
     initAppService(instance);
   } else {
-    // We should handle default template
-    return new TemplateModel(defaultAnswers as any);
+    // We should handle default template if auth flow was failed
+    return new TemplateModel(defaultAnswers);
   }
   const questions = getQuestions();
   let answers: Answers<string>;

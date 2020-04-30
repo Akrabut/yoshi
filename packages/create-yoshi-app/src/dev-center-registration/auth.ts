@@ -11,6 +11,7 @@ function waitForInstance(): Promise<string | null> {
       resolve(null);
     }, FALLBACK_DELAY);
     const app = express();
+    let _chrome: LaunchedChrome | null = null;
     const connections: Array<any> = [];
     app.get(
       '/instance',
@@ -29,8 +30,8 @@ function waitForInstance(): Promise<string | null> {
       connections.push(connection);
     });
     const cleanUp = async () => {
-      if (chrome) {
-        chrome.kill();
+      if (_chrome) {
+        _chrome.kill();
       }
       clearTimeout(tm);
       server.close();
@@ -39,7 +40,7 @@ function waitForInstance(): Promise<string | null> {
         curr.destroy();
       });
     };
-    const chrome = await openExistingChrome();
+    _chrome = await openExistingChrome();
   });
 }
 

@@ -2,10 +2,20 @@ import LocalAppTemplateModel from '../TemplateModel';
 import extendedPropmts, { Answers } from './extended-prompts';
 import TemplateModel from './TemplateModel';
 import getQuestions from './getQuestions';
+import { getInstance } from './auth';
+import { initAppService } from './appService';
+import defaultAnswers from './defaultAnswers';
 
 export default async (
   localAppModel: LocalAppTemplateModel,
 ): Promise<TemplateModel> => {
+  const instance = await getInstance();
+  if (instance) {
+    initAppService(instance);
+  } else {
+    // We should handle default template
+    return new TemplateModel(defaultAnswers as any);
+  }
   const questions = getQuestions();
   let answers: Answers<string>;
 

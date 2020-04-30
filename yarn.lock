@@ -3550,7 +3550,7 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
-"@types/express@*", "@types/express@4.17.6", "@types/express@^4.17.2":
+"@types/express@*", "@types/express@4.17.6", "@types/express@^4.17.2", "@types/express@^4.17.6":
   version "4.17.6"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/express/-/express-4.17.6.tgz#6bce49e49570507b86ea1b07b806f04697fac45e"
   integrity sha1-a85J5JVwUHuG6hsHuAbwRpf6xF4=
@@ -3817,6 +3817,13 @@
   version "4.1.2"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/npmlog/-/npmlog-4.1.2.tgz#d070fe6a6b78755d1092a3dc492d34c3d8f871c4"
   integrity sha1-0HD+amt4dV0QkqPcSS00w9j4ccQ=
+
+"@types/open@^6.2.1":
+  version "6.2.1"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@types/open/-/open-6.2.1.tgz#3797ccbe876cca4b0bc78bdfbc3a3008110fdb13"
+  integrity sha1-N5fMvodsyksLx4vfvDowCBEP2xM=
+  dependencies:
+    open "*"
 
 "@types/optimize-css-assets-webpack-plugin@5.0.1":
   version "5.0.1"
@@ -8610,6 +8617,17 @@ chownr@^1.1.1, chownr@^1.1.2:
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
   integrity sha1-b8nXtC0ypYNZYzdmbn0ICE2izGs=
 
+chrome-launcher@0.13.1:
+  version "0.13.1"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/chrome-launcher/-/chrome-launcher-0.13.1.tgz#cd5ed4952b630b9fccf2037b211cba81e5aae044"
+  integrity sha1-zV7UlStjC5/M8gN7IRy6geWq4EQ=
+  dependencies:
+    "@types/node" "*"
+    is-wsl "^2.1.0"
+    lighthouse-logger "^1.0.0"
+    mkdirp "^0.5.3"
+    rimraf "^3.0.2"
+
 chrome-trace-event@^1.0.2:
   version "1.0.2"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/chrome-trace-event/-/chrome-trace-event-1.0.2.tgz#234090ee97c7d4ad1a2c4beae27505deffc608a4"
@@ -11903,7 +11921,7 @@ express-handlebars@3.1.0:
     object.assign "^4.1.0"
     promise "^8.0.2"
 
-express@4.17.1, express@>=4.17.0, express@^4.0.0, express@^4.16.2, express@^4.16.3, express@^4.17.0:
+express@4.17.1, express@>=4.17.0, express@^4.0.0, express@^4.16.2, express@^4.16.3, express@^4.17.0, express@^4.17.1:
   version "4.17.1"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
   integrity sha1-RJH8OGBc9R+GKdOcK10Cb5ikwTQ=
@@ -15354,7 +15372,7 @@ is-wsl@^1.1.0:
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/is-wsl/-/is-wsl-1.1.0.tgz#1f16e4aa22b04d1336b66188a66af3c600c3a66d"
   integrity sha1-HxbkqiKwTRM2tmGIpmrzxgDDpm0=
 
-is-wsl@^2.1.1:
+is-wsl@^2.1.0, is-wsl@^2.1.1:
   version "2.1.1"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/is-wsl/-/is-wsl-2.1.1.tgz#4a1c152d429df3d441669498e2486d3596ebaf1d"
   integrity sha1-ShwVLUKd89RBZpSY4khtNZbrrx0=
@@ -17078,6 +17096,14 @@ lie@~3.3.0:
   dependencies:
     immediate "~3.0.5"
 
+lighthouse-logger@^1.0.0:
+  version "1.2.0"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/lighthouse-logger/-/lighthouse-logger-1.2.0.tgz#b76d56935e9c137e86a04741f6bb9b2776e886ca"
+  integrity sha1-t21Wk16cE36GoEdB9rubJ3bohso=
+  dependencies:
+    debug "^2.6.8"
+    marky "^1.2.0"
+
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
@@ -17937,6 +17963,11 @@ marked@0.8.0:
   version "0.8.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/marked/-/marked-0.8.0.tgz#ec5c0c9b93878dc52dd54be8d0e524097bd81a99"
   integrity sha1-7FwMm5OHjcUt1Uvo0OUkCXvYGpk=
+
+marky@^1.2.0:
+  version "1.2.1"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/marky/-/marky-1.2.1.tgz#a3fcf82ffd357756b8b8affec9fdbf3a30dc1b02"
+  integrity sha1-o/z4L/01d1a4uK/+yf2/OjDcGwI=
 
 math-random@^1.0.1:
   version "1.0.4"
@@ -19664,20 +19695,20 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-open@^6.3.0:
-  version "6.4.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/open/-/open-6.4.0.tgz#5c13e96d0dc894686164f18965ecfe889ecfc8a9"
-  integrity sha1-XBPpbQ3IlGhhZPGJZez+iJ7PyKk=
-  dependencies:
-    is-wsl "^1.1.0"
-
-open@^7.0.0, open@^7.0.2:
+open@*, open@^7.0.0, open@^7.0.2, open@^7.0.3:
   version "7.0.3"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/open/-/open-7.0.3.tgz#db551a1af9c7ab4c7af664139930826138531c48"
   integrity sha1-21UaGvnHq0x69mQTmTCCYThTHEg=
   dependencies:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
+
+open@^6.3.0:
+  version "6.4.0"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/open/-/open-6.4.0.tgz#5c13e96d0dc894686164f18965ecfe889ecfc8a9"
+  integrity sha1-XBPpbQ3IlGhhZPGJZez+iJ7PyKk=
+  dependencies:
+    is-wsl "^1.1.0"
 
 opencollective-postinstall@^2.0.0, opencollective-postinstall@^2.0.2:
   version "2.0.2"
@@ -23145,6 +23176,13 @@ rimraf@2.6.3, rimraf@~2.6.2:
   version "2.6.3"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/rimraf/-/rimraf-2.6.3.tgz#b2d104fe0d8fb27cf9e0a1cda8262dd3833c6cab"
   integrity sha1-stEE/g2Psnz54KHNqCYt04M8bKs=
+  dependencies:
+    glob "^7.1.3"
+
+rimraf@^3.0.2:
+  version "3.0.2"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/rimraf/-/rimraf-3.0.2.tgz#f1a5402ba6220ad52cc1282bac1ae3aa49fd061a"
+  integrity sha1-8aVAK6YiCtUswSgrrBrjqkn9Bho=
   dependencies:
     glob "^7.1.3"
 

@@ -1,7 +1,4 @@
 import axios from 'axios';
-import { token } from './config';
-
-axios.defaults.headers.common.Authorization = token;
 
 const getUrl = (path: string): string => {
   return `https://www.wix.com/_api/app-service/v1/${path}`;
@@ -86,4 +83,8 @@ export const createComponent = ({
       type,
       name,
     }));
+};
+
+export const initAppService = async (instance: string): Promise<void> => {
+  axios.defaults.headers.common.Authorization = instance;
 };

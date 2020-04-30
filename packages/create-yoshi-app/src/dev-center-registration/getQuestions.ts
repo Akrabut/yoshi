@@ -1,4 +1,3 @@
-import { capitalize } from 'lodash';
 import { ExtendedPromptObject } from './extended-prompts';
 import {
   createApp,

@@ -14,6 +14,5 @@ export default async ({ env }: ServeOptions = {}) => {
     }),
   );
 
-  console.log(closeFunctions);
   return () => Promise.all(closeFunctions.map(func => func()));
 };

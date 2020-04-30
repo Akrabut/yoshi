@@ -34,6 +34,10 @@ const formatComponent = (
   id: component.compId,
 });
 
+export const initAppService = async (instance: string): Promise<void> => {
+  axios.defaults.headers.common.Authorization = instance;
+};
+
 export const createApp = (name: string): Promise<{ appId: string }> => {
   return axios
     .post<{ appId: string }>(getUrl('apps'), {
@@ -83,8 +87,4 @@ export const createComponent = ({
       type,
       name,
     }));
-};
-
-export const initAppService = async (instance: string): Promise<void> => {
-  axios.defaults.headers.common.Authorization = instance;
 };

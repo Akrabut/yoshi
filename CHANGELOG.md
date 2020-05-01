@@ -1,5 +1,44 @@
 # Changelog
 
+## 4.65.0 (2020-04-30)
+
+#### :rocket: New Feature
+* `yoshi-common`, `yoshi-flow-legacy`, `yoshi-flow-library`, `yoshi-flow-monorepo`, `yoshi-helpers`
+  * [#2299](https://github.com/wix/yoshi/pull/2299) Allow only building specific apps in a monorepo (e.g. `yoshi-monorepo build my-app`) ([@amitdahan](https://github.com/amitdahan))
+
+#### :building_construction: Templates
+* `create-yoshi-app`
+  * [#2311](https://github.com/wix/yoshi/pull/2311) Move `__tests__` directory to be inside `src` ([@ranyitz](https://github.com/ranyitz))
+
+#### :nail_care: Polish
+* `yoshi-common`
+  * [#2313](https://github.com/wix/yoshi/pull/2313) Reduce amount of data saved in stats ([@Gongreg](https://github.com/Gongreg))
+
+## 4.64.0 (2020-04-28)
+
+#### :rocket: New Feature
+
+- `yoshi-server`
+  - [#2283](https://github.com/wix/yoshi/pull/2283) Support BM routing ([@yanivefraim](https://github.com/yanivefraim))
+
+#### :bug: Bug Fix
+
+- `yoshi-flow-monorepo`
+  - [#2310](https://github.com/wix/yoshi/pull/2310) Create stats for Elements/TB with Webpack's publicPath ([@ronami](https://github.com/ronami))
+- `jest-yoshi-preset`
+  - [#2309](https://github.com/wix/yoshi/pull/2309) Fix `devtools` option in `jest-yoshi.config.js` not working bug ([@ranyitz](https://github.com/ranyitz))
+
+#### :memo: Documentation
+
+- [#2290](https://github.com/wix/yoshi/pull/2290) Add initial BM Flow docs ([@amitdahan](https://github.com/amitdahan))
+
+## 4.63.1 (2020-04-28)
+
+#### :nail_care: Polish
+
+- `yoshi-flow-monorepo`
+  - [#2302](https://github.com/wix/yoshi/pull/2302) Decrease the size of Elements/TB stats file ([@ronami](https://github.com/ronami))
+
 ## 4.63.0 (2020-04-27)
 
 #### :rocket: New Feature

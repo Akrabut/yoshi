@@ -4,6 +4,8 @@ title: Getting Started
 sidebar_label: Getting Started
 ---
 
+> Experimental
+
 Welcome to Yoshi Server documentation!
 
 Yoshi Server makes it easier to consume data from the server by adding an abstraction over client server communication, using conventions.

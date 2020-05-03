@@ -14,6 +14,7 @@ module.exports = {
         'yoshi-server/getting-started',
         'yoshi-server/consuming-data-from-the-server',
         'yoshi-server/exposing-route',
+        'yoshi-server/react-binding',
       ],
     },
     'babel-preset-yoshi',

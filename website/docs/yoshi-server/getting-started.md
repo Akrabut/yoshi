@@ -43,7 +43,7 @@ Update `yoshi.config.js` of `package.json`'s `yoshi` section:
 
 Set your server to handle requests
 
-Yoshi Server will handle server requests by convention (see [api functions]() and [route functions]()). All we have to do is bootstrap it from our `index.js` file:
+Yoshi Server will handle server requests by convention (see [server functions](consuming-data-from-the-server#server-functions) and [route functions](exposing-route)). All we have to do is bootstrap it from our `index.js` file:
 
 ```js
 require("yoshi-server/bootstrap");
@@ -53,7 +53,7 @@ Now you are ready to add your first Yoshi Server function.
 
 ## Adding your first Yoshi Server function
 
-> Files with `.api.js` or `.api.ts` extention with named export functions will be treated as [server functions]().
+> Files with `.api.js` or `.api.ts` extention with named export functions will be treated as [server functions](consuming-data-from-the-server#server-functions).
 
 Add a `greet.api.ts` file to your project (if your project is in Javascript, use `.js` for all examples):
 

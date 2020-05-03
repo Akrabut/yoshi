@@ -10,6 +10,7 @@ export default async ({ env }: ServeOptions = {}) => {
         config: app.config,
         cwd: app.location,
         env,
+        useAppName: true,
       });
     }),
   );

@@ -5,14 +5,16 @@ import chalk from 'chalk';
 import waitPort from 'wait-port';
 import fs from 'fs-extra';
 import { getDevelopmentEnvVars } from 'yoshi-helpers/build/bootstrap-utils';
+import { stripOrganization } from 'yoshi-helpers/build/utils';
 import { SERVER_LOG_FILE } from 'yoshi-config/build/paths';
 import SocketServer from './socket-server';
 import { createSocket as createTunnelSocket } from './utils/suricate';
 
-function serverLogPrefixer() {
+function serverLogPrefixer(appName?: string) {
+  const prefix = appName ? `[${stripOrganization(appName)}]` : `[SERVER]`;
   return new stream.Transform({
     transform(chunk, encoding, callback) {
-      this.push(`${chalk.greenBright('[SERVER]')}: ${chunk.toString()}`);
+      this.push(`${chalk.greenBright(prefix)}: ${chunk.toString()}`);
       callback();
     },
   });
@@ -35,26 +37,30 @@ export class ServerProcess {
   private env: ServerProcessEnv;
   public port: number;
   public child?: child_process.ChildProcess;
+  private useAppName?: boolean;
   public appName: string;
 
   constructor({
     cwd = process.cwd(),
     serverFilePath,
-    appName,
     env,
     port,
+    useAppName,
+    appName,
   }: {
     cwd?: string;
     serverFilePath: string;
-    appName: string;
     env: ServerProcessEnv;
     port: number;
+    useAppName?: boolean;
+    appName: string;
   }) {
     this.cwd = cwd;
     this.serverFilePath = serverFilePath;
-    this.appName = appName;
     this.env = env;
     this.port = port;
+    this.useAppName = useAppName;
+    this.appName = appName;
   }
 
   async initialize() {
@@ -88,12 +94,21 @@ export class ServerProcess {
       },
     });
 
-    const serverLogWriteStream = fs.createWriteStream(serverLogFile);
-    const serverOutLogStream = this.child.stdout!.pipe(serverLogPrefixer());
+    const serverLogWriteStream = fs.createWriteStream(
+      path.join(this.cwd, SERVER_LOG_FILE),
+    );
+
+    const serverOutLogStream = this.child.stdout!.pipe(
+      serverLogPrefixer(this.useAppName ? this.appName : undefined),
+    );
+
     serverOutLogStream.pipe(serverLogWriteStream);
     serverOutLogStream.pipe(process.stdout);
 
-    const serverErrorLogStream = this.child.stderr!.pipe(serverLogPrefixer());
+    const serverErrorLogStream = this.child.stderr!.pipe(
+      serverLogPrefixer(this.useAppName ? this.appName : undefined),
+    );
+
     serverErrorLogStream.pipe(serverLogWriteStream);
     serverErrorLogStream.pipe(process.stderr);
 

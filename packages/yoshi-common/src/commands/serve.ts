@@ -30,10 +30,12 @@ export const serveApp = async ({
   config,
   cwd,
   env = {},
+  useAppName,
 }: {
   config: Config;
   cwd: string;
   env?: Record<string, string>;
+  useAppName?: boolean;
 }) => {
   const serverFilePath =
     serverStartFileParser(config.pkgJson) ?? getServerStartFile({ cwd });
@@ -49,6 +51,7 @@ export const serveApp = async ({
     serverFilePath,
     appName: config.name,
     port: config.servers.app.port,
+    useAppName,
     env: {
       NODE_ENV: 'development',
       ...env,

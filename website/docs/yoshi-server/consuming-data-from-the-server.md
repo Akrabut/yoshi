@@ -81,7 +81,7 @@ How does it work?
 
 ### React Bindings
 
-Instead of passing `httpClient` all over, consider using the [React Bindings]().
+Instead of passing `httpClient` all over, consider using the [React Bindings](react-binding).
 
 ### method
 

@@ -1,7 +1,7 @@
 ---
 id: exposing-route
-title: Exposing a route
-sidebar_label: Exposing a route
+title: Exposing a Route
+sidebar_label: Exposing a Route
 ---
 
 Since server functions are consumed from the client, we'll use route functions to expose routes to the outside world. Route functions are similar to server functions and support expressing routes (along with URL parameters) via the filesystem:
@@ -46,7 +46,7 @@ _Note_: You can have multiple params (all available under `this.params`):
 
 `//src/routes/users/[userid]/apps/[appid].js` -> `http://www.mydomain.com/users/123/apps/myAppId`
 
-### Default route
+### Index route
 
 Default route ('/') can be used by adding an `index.[j|t]s` file:
 `//src/routes/index.js`

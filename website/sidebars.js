@@ -10,7 +10,7 @@ module.exports = {
     // 'monorepo-flow'
     'legacy-flow',
     {
-      'yoshi-server': [
+      'Yoshi Server': [
         'yoshi-server/getting-started',
         'yoshi-server/consuming-data-from-the-server',
         'yoshi-server/exposing-route',

@@ -1,11 +1,7 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs-extra';
-import webpack, {
-  ExternalsElement,
-  ExternalsObjectElement,
-  ExternalsFunctionElement,
-} from 'webpack';
+import webpack, { ExternalsElement, ExternalsObjectElement } from 'webpack';
 import {
   SRC_DIR,
   STATICS_DIR,

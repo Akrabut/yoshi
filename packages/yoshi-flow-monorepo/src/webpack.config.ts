@@ -310,7 +310,7 @@ export function createSiteAssetsWebpackConfig(
     cwd: pkg.location,
     configName: 'site-assets',
     target: 'node',
-    useNodeExternals: false,
+    serverExternals: {},
     isDev,
     isMonorepo: true,
     isAnalyze,

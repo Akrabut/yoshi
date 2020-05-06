@@ -81,27 +81,6 @@ function addExtensionPrefix(filePath: string, prefix: string) {
   return `${filePath.slice(0, lastDotIndex)}.${prefix}${extension}`;
 }
 
-const findExternalFromObject = (
-  res: string,
-  externals: ExternalsObjectElement,
-): ExternalsObjectElement[keyof ExternalsObjectElement] | null => {
-  const key = Object.keys(externals).find(key =>
-    res.includes(`node_modules/${key}`),
-  );
-  if (key && externals[key]) {
-    const externalModule = externals[key];
-    if (
-      typeof externalModule === 'object' &&
-      !Array.isArray(externalModule) &&
-      externalModule.commonjs
-    ) {
-      return externalModule.commonjs;
-    }
-    return externalModule;
-  }
-  return null;
-};
-
 function prependNameWith(filename: string, prefix: string) {
   return filename.replace(/\.[0-9a-z]+$/i, match => `.${prefix}${match}`);
 }

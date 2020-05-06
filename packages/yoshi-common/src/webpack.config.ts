@@ -93,7 +93,15 @@ const findExternalFromObject = (
     res.includes(`node_modules/${key}`),
   );
   if (key && externals[key]) {
-    return externals[key];
+    const externalModule = externals[key];
+    if (
+      typeof externalModule === 'object' &&
+      !Array.isArray(externalModule) &&
+      externalModule.commonjs
+    ) {
+      return externalModule.commonjs;
+    }
+    return externalModule;
   }
   return null;
 };

@@ -1,7 +1,7 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs-extra';
-import webpack, { ExternalsElement, ExternalsObjectElement } from 'webpack';
+import webpack, { ExternalsElement } from 'webpack';
 import {
   SRC_DIR,
   STATICS_DIR,
@@ -19,7 +19,6 @@ import {
   isProduction as checkIsProduction,
   inTeamCity as checkInTeamCity,
 } from 'yoshi-helpers/build/queries';
-import { isPlainObject } from 'lodash';
 // @ts-ignore - missing types
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 // @ts-ignore - missing types

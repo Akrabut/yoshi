@@ -344,7 +344,6 @@ export function createBaseWebpackConfig({
   tpaStyle = false,
   forceEmitSourceMaps = false,
   exportAsLibraryName,
-  useNodeExternals = true,
   nodeExternalsWhitelist = [],
   useAssetRelocator = false,
   useYoshiServer = false,
@@ -353,7 +352,6 @@ export function createBaseWebpackConfig({
   useCustomSourceMapPlugin = false,
   forceEmitStats = false,
   forceMinimizeServer = false,
-  forceSpecificNodeExternals = false,
   serverExternals,
 }: {
   name: string;
@@ -386,7 +384,6 @@ export function createBaseWebpackConfig({
   enhancedTpaStyle?: boolean;
   tpaStyle?: boolean;
   forceEmitSourceMaps?: boolean;
-  useNodeExternals?: boolean;
   exportAsLibraryName?: string;
   nodeExternalsWhitelist?: Array<RegExp>;
   useAssetRelocator?: boolean;
@@ -398,7 +395,6 @@ export function createBaseWebpackConfig({
   useCustomSourceMapPlugin?: boolean;
   forceEmitStats?: boolean;
   forceMinimizeServer?: boolean;
-  forceSpecificNodeExternals?: boolean;
   serverExternals?: ExternalsElement | Array<ExternalsElement>;
 }): webpack.Configuration {
   const join = (...dirs: Array<string>) => path.join(cwd, ...dirs);
@@ -1090,7 +1086,7 @@ export function createBaseWebpackConfig({
 
     ...(target === 'node'
       ? {
-          externals: [
+          externals: serverExternals || [
             (
               context,
               request,
@@ -1109,42 +1105,6 @@ export function createBaseWebpackConfig({
               // Same as above, if the request cannot be resolved we need to have
               // webpack "bundle" it so it surfaces the not found error.
               if (!res) {
-                return callback();
-              }
-
-              // Svelte and React should always be external on the server side. Only relevant when more than one
-              // instance of Svelte/React exists. Normally, with two different Webpack bundles. Currently only
-              // relevant for Thunderbolt's use-case.
-              if (serverExternals) {
-                if (typeof serverExternals === 'function') {
-                  return serverExternals(context, res, (error, result) =>
-                    callback(error, result ? `commonjs ${request}` : undefined),
-                  );
-                } else if (isPlainObject(serverExternals)) {
-                  const configuredExternal = findExternalFromObject(
-                    res,
-                    serverExternals as ExternalsObjectElement,
-                  );
-                  if (configuredExternal) {
-                    return callback(undefined, configuredExternal);
-                  }
-                } else if (serverExternals instanceof RegExp) {
-                  if (res.match(serverExternals)) {
-                    return callback(undefined, `commonjs ${request}`);
-                  }
-                } else if (typeof serverExternals === 'string') {
-                  if (res.includes(serverExternals)) {
-                    return callback(undefined, `commonjs ${request}`);
-                  }
-                }
-              } else if (forceSpecificNodeExternals) {
-                if (res.match(/node_modules\/(svelte|react|lodash)/)) {
-                  return callback(undefined, `commonjs ${request}`);
-                }
-              }
-
-              // If `useNodeExternals` is turned off, bundle everything.
-              if (!useNodeExternals) {
                 return callback();
               }
 

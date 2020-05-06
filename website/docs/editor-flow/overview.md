@@ -5,35 +5,21 @@ sidebar_label: Editor Flow
 ---
 
 - [Overview](#overview)
-- [Initial Setup](#initial-setup)
-- [Local Development](#local-development)
-- [Testing](#testing)
-  - [Viewer App](#viewer-app)
-    - [E2E Against Production](#e2e-against-production)
-    - [SSR](#ssr)
-  - [Editor App & Settings Panel](#editor-app--settings-panel)
-    - [E2E Against Locally Served HTMLs](#e2e-against-locally-served-htmls)
-  - [Component & Unit Tests](#component--unit-tests)
-- [Deployment](#deployment)
-  - [Register an App in Wix's Dev Center](#register-an-app-in-wix-s-dev-center)
-  - [Deploy a new version](#deploy-a-new-version)
-- [OOI Development App](#ooi-development-app)
 
-## Overview
-> If you already has OOI experience and understand how it's working, just pass it to Local Development section.
+## Introduction to Out-Of-Iframe
+`out-of-iframe`(OOI) is a code name for a platform that enables creating Wix Apps that live in the Viewer's frame. It's similar to the old IFrame TPA but more performant. For more information head to the [official docs](https://bo.wix.com/wix-docs/client/client-frameworks#out-of-iframe).
 
-`out-of-iframe` is a code name for a platform that enables creating Wix Apps that lives in the Viewer's main frame. It's similar to the old TPA but should be more performant. For more information head to the [official docs](https://bo.wix.com/wix-docs/client/client-frameworks#out-of-iframe).
 
-For more info about current flow, take a look at the [RFC](https://github.com/wix/yoshi/issues/1489)
 
-**OOI app is constructed from 2 parts:**
+Each OOI app is constructed from components which are being consumed by 2 environments:
 
-- **Viewer**
-> Can include single or multple widgets. For example, component with list of items and item page.
+#### Viewer
+Here we'll render our component
+
 Each widget contains of component (view) and controller (logic, runs on webWorker). All controllers are being collected in a single file called `viewerScript`.
 So the result will be `[:widgetName]ViewerWidget.js` (for ex `buttonViewerWidget`) for each widget and single `viewerScript.js` for the whole app. These files is located in `dist/statics` directory.
 
-- **Editor**
+#### Editor
 > To preview viewer script in editor, it's not enough to provide viewerWidget. Currently platoform will create an iframe for you widget. So instead of js bundle, you have to prodive html file. It should be deprecated in future.
 Moreover, each of you widget should have Settings app. Here, you can provide ability for users to configure your widget. (color, logic, labels, etc).
 The result will be `editor.html` and `settings.html` for each of your widgets located in `dist/statics/editor/:widgetName.html` and `dist/statics/settings/:widgetName.html`.

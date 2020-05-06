@@ -70,6 +70,9 @@ export type InitialConfig = {
   experimentalUseAssetRelocator?: boolean;
   yoshiServer: boolean;
   startUrl?: string | Array<string>;
+  server?: {
+    externals?: WebpackExternals;
+  };
   webWorker?: {
     entry?: WebpackEntry;
     externals?: WebpackExternals;
@@ -123,6 +126,7 @@ export type Config = {
   experimentalUseAssetRelocator: boolean;
   yoshiServer: boolean;
   projectType: ProjectType | null;
+  serverExternals?: WebpackExternals;
   webWorkerEntry?: WebpackEntry;
   webWorkerExternals?: WebpackExternals;
   webWorkerServerEntry?: WebpackEntry;

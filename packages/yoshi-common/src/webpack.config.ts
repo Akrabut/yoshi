@@ -1,7 +1,11 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs-extra';
-import webpack from 'webpack';
+import webpack, {
+  ExternalsElement,
+  ExternalsObjectElement,
+  ExternalsFunctionElement,
+} from 'webpack';
 import {
   SRC_DIR,
   STATICS_DIR,
@@ -19,6 +23,7 @@ import {
   isProduction as checkIsProduction,
   inTeamCity as checkInTeamCity,
 } from 'yoshi-helpers/build/queries';
+import { isPlainObject } from 'lodash';
 // @ts-ignore - missing types
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 // @ts-ignore - missing types
@@ -79,6 +84,19 @@ function addExtensionPrefix(filePath: string, prefix: string) {
 
   return `${filePath.slice(0, lastDotIndex)}.${prefix}${extension}`;
 }
+
+const findExternalFromObject = (
+  res: string,
+  externals: ExternalsObjectElement,
+): ExternalsObjectElement[keyof ExternalsObjectElement] | null => {
+  const key = Object.keys(externals).find(key =>
+    res.includes(`node_modules/${key}`),
+  );
+  if (key && externals[key]) {
+    return externals[key];
+  }
+  return null;
+};
 
 function prependNameWith(filename: string, prefix: string) {
   return filename.replace(/\.[0-9a-z]+$/i, match => `.${prefix}${match}`);
@@ -332,6 +350,7 @@ export function createBaseWebpackConfig({
   forceEmitStats = false,
   forceMinimizeServer = false,
   forceSpecificNodeExternals = false,
+  serverExternals,
 }: {
   name: string;
   configName:
@@ -376,6 +395,7 @@ export function createBaseWebpackConfig({
   forceEmitStats?: boolean;
   forceMinimizeServer?: boolean;
   forceSpecificNodeExternals?: boolean;
+  serverExternals?: ExternalsElement | Array<ExternalsElement>;
 }): webpack.Configuration {
   const join = (...dirs: Array<string>) => path.join(cwd, ...dirs);
 
@@ -1091,7 +1111,27 @@ export function createBaseWebpackConfig({
               // Svelte and React should always be external on the server side. Only relevant when more than one
               // instance of Svelte/React exists. Normally, with two different Webpack bundles. Currently only
               // relevant for Thunderbolt's use-case.
-              if (forceSpecificNodeExternals) {
+              if (serverExternals) {
+                if (typeof serverExternals === 'function') {
+                  return serverExternals(context, request, callback);
+                } else if (isPlainObject(serverExternals)) {
+                  const configuredExternal = findExternalFromObject(
+                    res,
+                    serverExternals as ExternalsObjectElement,
+                  );
+                  if (configuredExternal) {
+                    return callback(undefined, configuredExternal);
+                  }
+                } else if (serverExternals instanceof RegExp) {
+                  if (res.match(serverExternals)) {
+                    return callback(undefined, `commonjs ${request}`);
+                  }
+                } else if (typeof serverExternals === 'string') {
+                  if (res.includes(serverExternals)) {
+                    return callback(undefined, `commonjs ${request}`);
+                  }
+                }
+              } else if (forceSpecificNodeExternals) {
                 if (res.match(/node_modules\/(svelte|react|lodash)/)) {
                   return callback(undefined, `commonjs ${request}`);
                 }

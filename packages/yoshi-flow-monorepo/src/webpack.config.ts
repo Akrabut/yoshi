@@ -200,6 +200,8 @@ export function createServerWebpackConfig(
     nodeExternalsWhitelist: libs.map(pkg => new RegExp(pkg.name)),
     useAssetRelocator: pkg.config.experimentalUseAssetRelocator,
     forceMinimizeServer: isThunderboltElementModule(pkg),
+    serverExternals: pkg.config.serverExternals,
+    // Remove next line when serverExternals will be implemented on thunderbolt app and element modules
     forceSpecificNodeExternals:
       isThunderboltAppModule(pkg) || isThunderboltElementModule(pkg),
     ...defaultOptions,

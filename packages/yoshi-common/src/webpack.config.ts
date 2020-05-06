@@ -1113,7 +1113,9 @@ export function createBaseWebpackConfig({
               // relevant for Thunderbolt's use-case.
               if (serverExternals) {
                 if (typeof serverExternals === 'function') {
-                  return serverExternals(context, request, callback);
+                  return serverExternals(context, res, (ctx, result) =>
+                    callback(ctx, result ? `commonjs ${request}` : undefined),
+                  );
                 } else if (isPlainObject(serverExternals)) {
                   const configuredExternal = findExternalFromObject(
                     res,

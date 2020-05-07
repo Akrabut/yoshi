@@ -1,7 +1,7 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs-extra';
-import webpack, { ExternalsElement } from 'webpack';
+import webpack, { ExternalsElement, RuleSetCondition } from 'webpack';
 import {
   SRC_DIR,
   STATICS_DIR,
@@ -40,6 +40,7 @@ import TpaStyleWebpackPlugin from 'tpa-style-webpack-plugin';
 // @ts-ignore - missing types
 import { mdsvex } from 'mdsvex';
 import WebpackBar from 'webpackbar';
+import isCi from 'is-ci';
 import { stripOrganization } from 'yoshi-helpers/build/utils';
 import { resolveNamespaceFactory } from './@stylable/node';
 import StylableWebpackPlugin from './@stylable/webpack-plugin';
@@ -126,8 +127,8 @@ function getProgressBarInfo(
   if (isMonorepo) {
     obj.name = `${stripOrganization(packageName)}\n  ${obj.name}`;
   }
-
-  const progressReporter = inTeamCity ? 'basic' : 'fancy';
+  const progressReporter =
+    isCi || process.env.PROGRESS_BAR === 'false' ? 'basic' : 'fancy';
 
   const profileReporter =
     isProduction && process.env.PROFILE === 'true' ? ['profile'] : [];
@@ -323,6 +324,7 @@ export function createBaseWebpackConfig({
   createEjsTemplates = false,
   performanceBudget,
   includeStyleLoaders = true,
+  includeInTranspilation = shouldTranspileFile,
   enhancedTpaStyle = false,
   tpaStyle = false,
   forceEmitSourceMaps = false,
@@ -358,6 +360,7 @@ export function createBaseWebpackConfig({
   experimentalRtlCss?: boolean;
   cssModules?: boolean;
   cwd?: string;
+  includeInTranspilation?: Array<RuleSetCondition> | RuleSetCondition;
   devServerUrl: string;
   externalizeRelativeLodash?: boolean;
   isAnalyze?: boolean;
@@ -662,7 +665,11 @@ export function createBaseWebpackConfig({
 
             new StylableWebpackPlugin({
               ...getCommonStylbleWebpackConfig(name),
-              filename: '[name].stylable.bundle.css',
+              filename: isDev
+                ? '[name].stylable.bundle.css'
+                : createEjsTemplates
+                ? '[name].[hash:8].stylable.bundle.css'
+                : '[name].stylable.bundle.css',
               outputCSS: separateStylableCss,
               includeCSSInJS: !separateStylableCss,
               runtimeMode: 'shared',
@@ -896,7 +903,10 @@ export function createBaseWebpackConfig({
 
         {
           test: /\.(ts|tsx)$/,
-          include: shouldTranspileFile,
+          // Don't transpile the output of Carmi with Babel/TypeScript
+          // https://github.com/wix/yoshi/pull/2227
+          exclude: /\.carmi.(js|ts)$/,
+          include: includeInTranspilation,
           use: [
             {
               loader: 'thread-loader',
@@ -932,10 +942,10 @@ export function createBaseWebpackConfig({
 
         {
           test: reScript,
-          include: shouldTranspileFile,
+          include: includeInTranspilation,
           // Optimize JS processing worker stuff excluded due to
           // https://github.com/webpack-contrib/worker-loader/issues/177
-          exclude: /\.inline\.worker\.js/,
+          exclude: [/\.inline\.worker\.js/, /\.carmi.(js|ts)$/],
           use: [
             {
               loader: 'thread-loader',
@@ -948,7 +958,10 @@ export function createBaseWebpackConfig({
 
         {
           test: reScript,
-          include: shouldTranspileFile,
+          // Don't transpile the output of Carmi with Babel/TypeScript
+          // https://github.com/wix/yoshi/pull/2227
+          exclude: /\.carmi.(js|ts)$/,
+          include: includeInTranspilation,
           use: [
             {
               loader: 'babel-loader',

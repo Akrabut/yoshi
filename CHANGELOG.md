@@ -1,5 +1,42 @@
 # Changelog
 
+## 4.68.2 (2020-05-07)
+
+#### :bug: Bug Fix
+
+- `yoshi-common`
+  - [#2341](https://github.com/wix/yoshi/pull/2341) run webpackbar in basic mode in every ci environment ([@ranyitz](https://github.com/ranyitz))
+- `yoshi-common`, `yoshi-flow-monorepo`
+  - [#2349](https://github.com/wix/yoshi/pull/2349) Include only monorepo packages in transpilation ([@ranyitz](https://github.com/ranyitz))
+
+## 4.68.1 (2020-05-06)
+
+#### :bug: Bug Fix
+
+- `yoshi-common`, `yoshi-flow-monorepo`
+  - [#2344](https://github.com/wix/yoshi/pull/2344) Do not show the progress bar in case there are many compilations ([@ranyitz](https://github.com/ranyitz))
+- `create-yoshi-app`
+  - [#2346](https://github.com/wix/yoshi/pull/2346) Add lodash to create yoshi app dependencies ([@yavorsky](https://github.com/yavorsky))
+
+## 4.68.0 (2020-05-06)
+
+#### :building_construction: Templates
+
+- `create-yoshi-app`
+  - [#2336](https://github.com/wix/yoshi/pull/2336) Use single brackets for i18next interpolation in templates ([@sidoruk-sv](https://github.com/sidoruk-sv))
+
+#### :nail_care: Polish
+
+- `yoshi-common`
+  - [#2340](https://github.com/wix/yoshi/pull/2340) Add content hash to Stylable files ([@ronami](https://github.com/ronami))
+
+#### :memo: Documentation
+
+- `yoshi-server`
+  - [#2327](https://github.com/wix/yoshi/pull/2327) Yoshi Server Docs - middlwares ([@yanivefraim](https://github.com/yanivefraim))
+- Other
+  - [#2330](https://github.com/wix/yoshi/pull/2330) Yoshi Server docs: custom server ([@yanivefraim](https://github.com/yanivefraim))
+
 ## 4.67.0 (2020-05-06)
 
 #### :rocket: New Feature

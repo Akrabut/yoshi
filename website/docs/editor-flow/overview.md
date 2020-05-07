@@ -10,11 +10,14 @@ sidebar_label: Editor Flow
 `out-of-iframe`(OOI) is a code name for a platform that enables creating Wix Apps that live in the Viewer's frame. It's similar to the old IFrame TPA but more performant. For more information head to the [official docs](https://bo.wix.com/wix-docs/client/client-frameworks#out-of-iframe).
 
 
-
+### Environments
 Each OOI app is constructed from components which are being consumed by 2 environments:
 
 #### Viewer
-Here we'll render our component
+The component will be rendered in a single frame, like regular Single Page App. It's needed mostly for performance and environemnt consistency between different components.
+
+#### Editor
+
 
 Each widget contains of component (view) and controller (logic, runs on webWorker). All controllers are being collected in a single file called `viewerScript`.
 So the result will be `[:widgetName]ViewerWidget.js` (for ex `buttonViewerWidget`) for each widget and single `viewerScript.js` for the whole app. These files is located in `dist/statics` directory.

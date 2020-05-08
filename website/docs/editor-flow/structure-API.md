@@ -38,16 +38,51 @@ It will be:
   appDefinitionId: 'YOUR_APP_DEFINITION_ID'
 }
 ```
-#### appDefinitionId
-Helps `yoshi-flow-editor start` to build correct query params to override `viewerScript` and `editorScript` bundles to local ones.
-
-To use `appDefinitionId` in runtime:
+To use app configration values in runtime it's valid to:
 ```ts
 import { appDefinitionId } from '../../.application.json';
 ```
 
 
 ### Application level
+Under `src` directory located: `viewer.app.ts`, `editor.app.ts`, `assets` and `components`.
 #### `viewer.app.ts`
-##### initAppForPage...
+Entry point for Viewer Script file.
+
+##### `initAppForPage`
+A general call to the service where it should initiate its reusable data across components.
+It's called with the basic configuration of the application before the Viewer knows which components exist on the page.
+
+⚠️ You shouldn't use `createControllers`. We will generate it under the hood.
+
+*viewer.app.ts*
+```ts
+export const initAppForPage = (initParams, platformApis, wixCodeApi, platformServicesApis) => {
+  fetchExperiments();
+  initStorage();
+};
+```
+
+For more info related to `initAppForPage` check the [Viewer platform official docs](https://bo.wix.com/wix-docs/client/client-viewer-platform/articles/lifecycle#client-viewer-platform_articles_lifecycle_initappforpage)
+
 ### `editor.app.ts`
+Entry point for Editor Script file.
+
+*editor.app.ts*
+```ts
+export const editorReady = async (editorSDK, appDefinitionId, { origin, firstInstall }) => {
+  const platform = new AppPlatform(editorSDK, appDefinitionId);
+
+  if (firstInstall) {
+    await platform.install();
+  } else {
+    await platform.hackForTemplates();
+  }
+};
+
+export const getAppManifest = async () => {
+  return getManifest();
+};
+```
+
+For more info about editor platform script, please check [Editor Platform offical docs](https://bo.wix.com/wix-docs/client/editor-platform/editor-application-reference/editor-platform-app)

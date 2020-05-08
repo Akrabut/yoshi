@@ -42,3 +42,10 @@ The only thing Editor Flow is requiring from users is to follow common conventio
 **Does all these mean that I shouldn't communicate with platform and just work on regular React app?**
 It's our goal, but anyway you still need to use platform's API's. Our task is to create fully-typed and simple abstractions for it, so you'll work with additional APIs the most efficient way you can.
 For example, we can't get rid of PublicData at all, but we can provide some useful API using `get` / `set`, so you won't be obligated with writing a lot of boilerplate acress the app.
+
+### Types of apps Editor Flow Support
+Currently we can support 2 types of apps: **Out of iFrame**  and **Platform** apps. 
+Each project can be mixed with OOI and Platform components on the same time. It's useful for projects, which consist of Out of iFrame components, but want to gradullay migrate some of it to studio widgets. On the same time, some projects can be already mixed, so we shouldn't separate scopes we are working on.
+Just running `yoshi-flow-editor start` can open a website containing installed both OOI and Platform Components with configured URL overrides to local bundles and HMR. Cool, right?
+
+> It's a rare case and we didn't test mixed apps a lot, so on the initial stages it could be not stable enough, but we are trying to react lightning fast and happy to hear any feedback 🙂

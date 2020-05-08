@@ -11,9 +11,14 @@ const WILL_REGISTER = 2;
 const WAS_REGISTERED = 1;
 const WIDGET_OUT_OF_IFRAME = 'WIDGET_OUT_OF_IFRAME';
 const PAGE_OUT_OF_IFRAME = 'PAGE_OUT_OF_IFRAME';
+const STUDIO_WIDGET = 'STUDIO_WIDGET';
 const PLATFORM = 'PLATFORM';
 const WIDGET_IFRAME = 'WIDGET';
 const PAGE_IFRAME = 'PAGE';
+
+type OOIComponent = typeof WIDGET_OUT_OF_IFRAME | typeof PAGE_OUT_OF_IFRAME;
+type StudioComponent = typeof STUDIO_WIDGET;
+type PlatformComponent = typeof PLATFORM;
 
 const formatAppOption = (app: {
   name: string;
@@ -53,27 +58,66 @@ const wasSelected = (ids: Array<string>) => (component: DevCenterComponent) =>
 const getBaseUrl = (projectName: string) =>
   `https://static.parastorage.com/services/${projectName}/1.0.0`;
 
-const generateComponentData = (projectName: string, componentName: string) => {
+const generateOOIComponentData = (
+  projectName: string,
+  componentName: string,
+  componentType: OOIComponent,
+) => {
   const baseUrl = getBaseUrl(projectName);
 
+  if (componentType === WIDGET_OUT_OF_IFRAME) {
+    return {
+      componentUrl: `${baseUrl}/${componentName}ViewerWidget.bundle.min.js`,
+      widgetData: {
+        addOnlyOnce: false,
+        default: true,
+        essential: false,
+        position: {
+          region: 'no_region',
+        },
+        settingsEndpointUrl: `${baseUrl}/settings/${componentName}.html`,
+        widgetEndpointUrl: `${baseUrl}/editor/${componentName}.html`,
+        widgetMobileEndpointUrl: `${baseUrl}/editor/${componentName}.html`,
+        widgetWidthType: 'NONE_TYPE',
+      },
+    };
+  }
   return {
     componentUrl: `${baseUrl}/${componentName}ViewerWidget.bundle.min.js`,
-    widgetData: {
-      addOnlyOnce: false,
+    pageData: {
+      addStrechButton: false,
       default: true,
       essential: false,
-      position: {
-        region: 'no_region',
-      },
+      isFullWidth: false,
+      isHidden: false,
       settingsEndpointUrl: `${baseUrl}/settings/${componentName}.html`,
-      widgetEndpointUrl: `${baseUrl}/editor/${componentName}.html`,
-      widgetMobileEndpointUrl: `${baseUrl}/editor/${componentName}.html`,
-      widgetWidthType: 'NONE_TYPE',
+      pageEndpointUrl: `${baseUrl}/editor/${componentName}.html`,
+      pageMobileEndpointUrl: `${baseUrl}/editor/${componentName}.html`,
     },
   };
 };
 
-const generateViewerScriptData = (projectName: string) => {
+const generateStudioComponentData = () => {
+  return {
+    essential: false,
+  };
+};
+
+const generateComponentData = (
+  projectName: string,
+  componentName: string,
+  componentType: OOIComponent | StudioComponent,
+) => {
+  if (
+    componentType === WIDGET_OUT_OF_IFRAME ||
+    componentType === PAGE_OUT_OF_IFRAME
+  ) {
+    return generateOOIComponentData(projectName, componentName, componentType);
+  }
+  return generateStudioComponentData();
+};
+
+const generatePlatformComponentData = (projectName: string) => {
   const baseUrl = getBaseUrl(projectName);
   return {
     viewerScriptUrl: `${baseUrl}/viewerScript.bundle.min.js`,
@@ -89,10 +133,7 @@ const generateViewerScriptData = (projectName: string) => {
 
 const getDataForComponent = (
   data: any,
-  type:
-    | typeof WIDGET_OUT_OF_IFRAME
-    | typeof PAGE_OUT_OF_IFRAME
-    | typeof PLATFORM,
+  type: OOIComponent | StudioComponent | PlatformComponent,
 ) => {
   if (!data) {
     return undefined;
@@ -106,6 +147,11 @@ const getDataForComponent = (
   } else if (type === PAGE_OUT_OF_IFRAME) {
     return {
       pageOutOfIframeData: data,
+      compType: type,
+    };
+  } else if (type === STUDIO_WIDGET) {
+    return {
+      studioWidgetComponentData: data,
       compType: type,
     };
   } else if (type === PLATFORM) {
@@ -205,19 +251,36 @@ export default (): Array<ExtendedPromptObject<string>> => {
               type: 'select',
               name: 'registerComponentType',
               message: 'Register a component',
-              choices: [
-                { title: 'Register a Widget', value: WIDGET_OUT_OF_IFRAME },
-                { title: 'Register a Page', value: PAGE_OUT_OF_IFRAME },
-                {
-                  title: 'Finish registration',
-                  value: null,
-                },
-              ],
               before(answers) {
                 if (!answers.components) {
                   answers.components = [];
                 }
                 return answers;
+              },
+              async getDynamicChoices(answers, context) {
+                if (
+                  context.templateDefinition.name ===
+                  'flow-editor - Out of iFrame'
+                ) {
+                  return [
+                    { title: 'Register a Widget', value: WIDGET_OUT_OF_IFRAME },
+                    { title: 'Register a Page', value: PAGE_OUT_OF_IFRAME },
+                    {
+                      title: 'Finish registration',
+                      value: null,
+                    },
+                  ];
+                }
+                return [
+                  {
+                    title: 'Register a Widget',
+                    value: STUDIO_WIDGET,
+                  },
+                  {
+                    title: 'Finish registration',
+                    value: null,
+                  },
+                ];
               },
               repeatUntil(answers) {
                 return !answers.registerComponentType;
@@ -239,7 +302,9 @@ export default (): Array<ExtendedPromptObject<string>> => {
                             appId: answers.appId,
                             type: PLATFORM,
                             data: getDataForComponent(
-                              generateViewerScriptData(context.projectName),
+                              generatePlatformComponentData(
+                                context.projectName,
+                              ),
                               PLATFORM,
                             ),
                           });
@@ -254,6 +319,7 @@ export default (): Array<ExtendedPromptObject<string>> => {
                               generateComponentData(
                                 context.projectName,
                                 answers.componentName,
+                                answers.registerComponentType,
                               ),
                               answers.registerComponentType,
                             ),
@@ -265,9 +331,9 @@ export default (): Array<ExtendedPromptObject<string>> => {
                         return !!value;
                       },
                       message: `${
-                        answers.registerComponentType === WIDGET_OUT_OF_IFRAME
-                          ? 'Widget'
-                          : 'Page'
+                        answers.registerComponentType === PAGE_OUT_OF_IFRAME
+                          ? 'Page'
+                          : 'Widget'
                       } name`,
                     },
                   ];

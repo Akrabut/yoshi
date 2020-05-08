@@ -44,15 +44,19 @@ if (process.env.EXPERIMENTAL_FLOW_BM === 'true') {
     language: ['typescript'],
   });
 }
-if (process.env.EXPERIMENTAL_FLOW_EDITOR === 'true') {
-  const usePlatformTemplate =
-    process.env.EXPERIMENTAL_PLATFORM_TEMPLATE === 'true';
 
+if (process.env.EXPERIMENTAL_FLOW_EDITOR === 'true') {
   templates.push({
-    name: 'flow-editor',
-    path: toTemplatePath(
-      usePlatformTemplate ? 'flow-editor-platform' : 'flow-editor',
-    ),
+    name: 'flow-editor - Out of iFrame',
+    path: toTemplatePath('flow-editor'),
+    language: ['typescript'],
+  });
+}
+
+if (process.env.EXPERIMENTAL_PLATFORM_TEMPLATE === 'true') {
+  templates.push({
+    name: 'flow-editor - Platform App',
+    path: toTemplatePath('flow-editor-platform'),
     language: ['typescript'],
   });
 }

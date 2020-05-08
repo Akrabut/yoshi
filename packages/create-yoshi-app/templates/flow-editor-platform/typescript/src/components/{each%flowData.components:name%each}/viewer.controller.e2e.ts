@@ -1,4 +1,4 @@
-import { viewerUrl } from '../dev/sites';
+import { viewerUrl } from '../../../dev/sites';
 
 describe('Viewer App', () => {
   it('should change text on button click', async () => {

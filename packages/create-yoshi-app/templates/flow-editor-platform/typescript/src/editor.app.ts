@@ -1,7 +1,7 @@
 import { editorScriptBuilder } from '@wix/bob-widget-services';
 import { EditorSDK } from '@wix/platform-editor-sdk';
 import createAppAPI from './editor/appAPI';
-import firstWidget from './components/{each%flowData.components:name%each}/editor.controller';
+import firstWidget from './components/firstWidget/editor.controller';
 
 const TOKEN = 'token';
 

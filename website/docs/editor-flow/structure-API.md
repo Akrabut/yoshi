@@ -1,4 +1,8 @@
-## Structure API
+---
+id: structure-API
+title: Structure API
+sidebar_label: Structure API
+---
 
 #### Basic app structure
 After you bootstraped the app via create-yoshi-app, the structure will be similar to:

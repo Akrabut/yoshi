@@ -1,4 +1,8 @@
-## Runtime API
+---
+id: runtime-API
+title: Runtime API
+sidebar_label: Runtime API
+---
 
 `yoshi-flow-editor-runtime` package provides a lot of useful helpers to reduce boilerplate for Out-of-iFrame apps.
 

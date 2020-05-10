@@ -1,4 +1,8 @@
-## CLI API
+---
+id: cli-API
+title: CLI API
+sidebar_label: CLI API
+---
 
 The Yoshi Flow Editor CLI allows you to start, build, test and lint application.
 

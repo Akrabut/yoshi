@@ -4,8 +4,6 @@ title: Editor Flow Overview
 sidebar_label: Editor Flow
 ---
 
-- [Overview](#overview)
-
 ## Introduction to Out-Of-Iframe
 `out-of-iframe`(OOI) is a code name for a platform that enables creating Wix Apps that live in the Viewer's frame. It's similar to the old IFrame TPA but more performant. For more information head to the [official docs](https://bo.wix.com/wix-docs/client/client-frameworks#out-of-iframe).
 

@@ -1,4 +1,8 @@
-## Local Development
+---
+id: local-development
+title: Local Development
+sidebar_label: Local Development
+---
 
 ### Overview
 Editor yoshi flow aims to create fastest possible development process for Out of iFrame apps.

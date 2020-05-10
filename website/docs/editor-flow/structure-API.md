@@ -134,14 +134,14 @@ The basic idea is that developers shouldn't be aware of this difference.
 Just exporting a valid React Component and receiving a props from the controller's `setProps` will perfectly work.
 
 *Widget.ts*
-```ts
+```tsx
 export default ({ title }) => (<div>
   <h1>{title}</h1>
 </div>)
 ```
 
 *controller.ts*
-```ts
+```tsx
 export default () => ({
   pageReady() {
     setProps({
@@ -149,4 +149,39 @@ export default () => ({
     });
   }
 })
+```
+
+#### `Settings`
+*(optional)*
+
+File which `export default` React Component.
+
+It will be rendered in editor part. Via Settings panel app's user can configure Out-of-iFrame Widget.
+
+It's recommend to use [`wix-base-ui`](https://github.com/wix-private/wix-base-ui) for styling and [TPA Settings](https://github.com/wix-private/tpa-settings) for reducing boilerplate relating to Settings panel development.
+
+*Settings*
+```tsx
+import { TpaSettingsProvider } from '@wix/tpa-settings/dist/src/contexts';
+import { SettingsTabLayout } from '@wix/tpa-settings/dist/src/components';
+import { WixSDK } from 'yoshi-flow-editor-runtime';
+import 'yoshi-flow-editor-runtime/styles/wix-base-ui.global.scss';
+
+const Settings = () => {
+  return (
+    <WixSDK>{({ Wix }) => (
+      <TpaSettingsProvider Wix={Wix}>
+        <SettingsTabLayout>
+          <SettingsTabLayout.Tab
+            title={t('settings.tab.main')}
+            articleId="78c122c7-ef06-47c1-a137-07abfae7ed89"
+            Component={() => <MainTab />}
+          />
+        </SettingsTabLayout>
+      </TpaSettingsProvider>
+    )}</WixSDK>
+  );
+};
+
+export default Settings;
 ```

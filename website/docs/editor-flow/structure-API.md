@@ -55,7 +55,7 @@ It's called with the basic configuration of the application before the Viewer kn
 
 ⚠️ You shouldn't use `createControllers`. We will generate it under the hood.
 
-*viewer.app.ts*
+*src/viewer.app.ts*
 ```ts
 export const initAppForPage = (initParams, platformApis, wixCodeApi, platformServicesApis) => {
   fetchExperiments();
@@ -65,10 +65,10 @@ export const initAppForPage = (initParams, platformApis, wixCodeApi, platformSer
 
 For more info related to `initAppForPage` check the [Viewer platform official docs](https://bo.wix.com/wix-docs/client/client-viewer-platform/articles/lifecycle#client-viewer-platform_articles_lifecycle_initappforpage)
 
-### `editor.app.ts`
+#### `editor.app.ts`
 Entry point for Editor Script file.
 
-*editor.app.ts*
+*src/editor.app.ts*
 ```ts
 export const editorReady = async (editorSDK, appDefinitionId, { origin, firstInstall }) => {
   const platform = new AppPlatform(editorSDK, appDefinitionId);
@@ -86,3 +86,67 @@ export const getAppManifest = async () => {
 ```
 
 For more info about editor platform script, please check [Editor Platform offical docs](https://bo.wix.com/wix-docs/client/editor-platform/editor-application-reference/editor-platform-app)
+
+
+### Component level
+According to the Yoshi Editor Flow concept, the app is grouped by components, instead of functional purpose. Since communitcation between different components (Widget, Page) in scope of single app is a rare case, people usually working on single Component while working on the new business feature.
+
+So for now, we'll have `Widget`, `Settings` and `controller` in a single place, instead of having `settings` directory with all settings panels of your app. Or `viewerScript` directory, which will include all controllers. With last approach, it could be really hard to navigate between `controller` and `Widget` located in completely different directories or even projects, since Widget consumes properties passed by controller. You'll probably want to maintain `PublicData` in a single place also instead of switching between settings and widget directory.
+
+#### `.component.json`
+Located under `src/components/:componentName/.component.json` this config file helps us to generate `createControllers` for Viewer Script under the hood. Here you can find `id` of your component and type (`WIDGET_OUT_OF_IFRAME`, `PAGE_OUT)OF_IFRAME` or `APP_STUDIO_WIDGET`).
+
+#### `controller` or `viewer.controller`
+File which `export default createController` function.
+
+`createController` is called with useful arguments by platform.
+
+Arguments:
+##### `controllerConfig:` *(platform)* [IControllerInfo](https://bo.wix.com/wix-docs/client/client-viewer-platform/articles/lifecycle#client-viewer-platform_articles_lifecycle_controllerinfo)
+##### `appData`: *(flow)*
+Object which aims to use data for all controllers. This is a data that comes from `mapPlatformStateToAppData` method, which is being called before `createControllers`.
+
+##### `frameworkData`: *(flow)*
+Data with experiments, locations and other info being fetched.
+###### `experimentsPromise`: `Promise<Experiments>`
+Promise that's return `Experiments` instance for current scope.
+
+*controller.ts*
+```ts
+export default async function createController({ frameworkData }) => {
+  return {
+    pageReady() {
+      frameworkData.experimentsPromise.then(experiments => {
+        setProps({
+          withNewButton: experiments.get('specs.my-scope.EnableNewButton'),
+        });
+      });
+    }
+  };
+}
+```
+
+#### `Widget`
+File which `export default` React Component.
+
+This component will be rendered in 2 different environments: viewer (common frame for the whole side) and editor (isolated iFrame).
+The basic idea is that developers shouldn't be aware of this difference.
+Just exporting a valid React Component and receiving a props from the controller's `setProps` will perfectly work.
+
+*Widget.ts*
+```ts
+export default ({ title }) => (<div>
+  <h1>{title}</h1>
+</div>)
+```
+
+*controller.ts*
+```ts
+export default () => ({
+  pageReady() {
+    setProps({
+      title: 'Some title from controller',
+    });
+  }
+})
+```

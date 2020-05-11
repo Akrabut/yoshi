@@ -102,6 +102,11 @@ const testTemplate = mockedAnswers => {
           mockedAnswers.templateDefinition.title,
           'WIDGET_OUT_OF_IFRAME',
         );
+      } else if (isAppBuilder(mockedAnswers.templateDefinition.name)) {
+        mockFlowData(
+          mockedAnswers.templateDefinition.title,
+          'STUDIO_WIDGET',
+        );
       }
       const { createApp } = mock.reRequire('../src/index');
 

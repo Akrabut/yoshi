@@ -16,7 +16,9 @@ describe('GetServerStarFile', () => {
   });
 
   it('should return cli entry if one is used and notify about deprecation', () => {
-    expect(getServerStartFile('cliPath')).toEqual('cliPath');
+    expect(getServerStartFile({ serverStartFileCLI: 'cliPath' })).toEqual(
+      'cliPath',
+    );
 
     expect(log).toHaveBeenCalledWith(
       expect.stringContaining(
@@ -29,13 +31,13 @@ describe('GetServerStarFile', () => {
     it('should try to look for dev/server.ts file', () => {
       mockFs(['dev/server.js', 'dev/server.ts', 'index.js']);
 
-      expect(getServerStartFile(undefined)).toEqual('dev/server.ts');
+      expect(getServerStartFile({})).toEqual('dev/server.ts');
     });
 
     it('should fall back to dev/server.js when dev/server.ts is missing', () => {
       mockFs(['dev/server.js']);
 
-      expect(getServerStartFile(undefined)).toEqual('dev/server.js');
+      expect(getServerStartFile({})).toEqual('dev/server.js');
     });
   });
 
@@ -43,19 +45,19 @@ describe('GetServerStarFile', () => {
     it('should try to look for index-dev.ts file', () => {
       mockFs(['index-dev.ts', 'index.ts']);
 
-      expect(getServerStartFile(undefined)).toEqual('index-dev.ts');
+      expect(getServerStartFile({})).toEqual('index-dev.ts');
     });
 
     it('should fall back to index-dev.js file when index-dev.ts is missing', () => {
       mockFs(['index-dev.js']);
 
-      expect(getServerStartFile(undefined)).toEqual('index-dev.js');
+      expect(getServerStartFile({})).toEqual('index-dev.js');
     });
 
     it('should notify about deprecation when using index.js', () => {
       mockFs(['index.js']);
 
-      getServerStartFile(undefined);
+      getServerStartFile({});
 
       expect(log).toHaveBeenCalledWith(
         expect.stringContaining(
@@ -67,13 +69,13 @@ describe('GetServerStarFile', () => {
     it('should try to look for index.ts file when index-dev is missing', () => {
       mockFs(['index.ts']);
 
-      expect(getServerStartFile(undefined)).toEqual('index.ts');
+      expect(getServerStartFile({})).toEqual('index.ts');
     });
 
     it('should fall back to index.js file when index.ts is missing', () => {
       mockFs(['index.js']);
 
-      expect(getServerStartFile(undefined)).toEqual('index.js');
+      expect(getServerStartFile({})).toEqual('index.js');
     });
   });
 
@@ -84,7 +86,7 @@ describe('GetServerStarFile', () => {
       jest.spyOn(queries, 'existsSync').mockReturnValue(false);
 
       try {
-        getServerStartFile(undefined);
+        getServerStartFile({});
       } catch (e) {
         expect(e.message).toEqual(
           expect.stringContaining('Entry point is missing!'),

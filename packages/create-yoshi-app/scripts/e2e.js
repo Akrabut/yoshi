@@ -96,7 +96,9 @@ const testTemplate = mockedAnswers => {
     // in the describe block will run first!
     it('step 1: should generate project successfully', async () => {
       mockAppData(mockedAnswers);
-      if (mockedAnswers.templateDefinition.name === 'flow-editor') {
+      if (
+        mockedAnswers.templateDefinition.name === 'flow-editor - Out of iFrame'
+      ) {
         mockFlowData(
           mockedAnswers.templateDefinition.title,
           'WIDGET_OUT_OF_IFRAME',

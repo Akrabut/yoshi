@@ -9,6 +9,7 @@ sidebar_label: Editor Flow
 
 
 ### Environments
+![excalidraw-202034141034 (1)](https://user-images.githubusercontent.com/1521229/81549372-4e322a80-9387-11ea-8d0a-2c3bd1cf38bc.png)
 Each OOI app is constructed from components which are being consumed by 2 environments:
 
 #### Viewer

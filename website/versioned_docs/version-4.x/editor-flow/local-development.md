@@ -19,3 +19,6 @@ This command will do few things:
      - Settings URL: `localhost:3000/settings/:componentName`
 These URLs could be used for e2e testing or Widget or Settings development without going to editor page.
 - Open Editor and Viewer URLs with override query params to trigger a platform load local bundles instead of production one. The only thing you have to do to make it work is to create a blank website and add you Dev Center App here by clicking on `Test Your App` button in Dev Center if your app wasn't submitted yet or Add it via `Add App section` if it was.
+
+![excalidraw-202034141034](https://user-images.githubusercontent.com/1521229/81549570-9c472e00-9387-11ea-846f-d1d0550e3357.png)
+The basic concept of URL overrides for production environment

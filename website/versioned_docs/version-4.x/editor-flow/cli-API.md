@@ -8,7 +8,7 @@ The Yoshi Flow Editor CLI allows you to start, build, test and lint application.
 
 To get a list of the available CLI commands, run the following command inside your project directory: `yoshi-flow-editor --help`
 
-### Start
+## Start
 ```
 yoshi-flow-editor start
 ```
@@ -30,10 +30,10 @@ It will create 2 local server processes under the hood:
 |Editor|`localhost:3000/editor/[:componentName]`|
 |Settings panel|`localhost:3000/settings/[:componentName]`|
 
-#### `--production`
+### `--production`
 Will create minified bundles to emulate production build during local experience.
 
-### Build
+## Build
 ```
 yoshi-flow-editor build
 ```
@@ -42,23 +42,23 @@ Builds optimized for the best performance app for production environment to the 
 - Creates minified Widget, viewerScript and editorScript bundles. (ex. `dist/buttonViewerWidget.bundle.min.js`)
 - Generates editor and settings `.html`s under `dist/editor/[:componentName].html` file. It could be used as a editor url and settings panel url on production. If you are using own backend to serve editor part, you can still find a `.vm` files at the same locations.
 
-#### `--analyze`
+### `--analyze`
 Will build the app and open bundle analysis results. Will open tabs with visual statistics for widget and worker bundles.
 
-### Test
+## Test
 ```
 yoshi-flow-editor test
 ```
 Start your test with the configured test runner (Jest by default).
 
-#### `--watch`
+### `--watch`
 Start tests in watch mode.
 
-### Lint
+## Lint
 ```
 yoshi-flow-editor lint
 ```
 Runs linter configured on your working files.
 
-#### `--fix`
+### `--fix`
 Runs linter and tries to fix issues in your codebase. Fixes are syntax-aware so you won't experience errors introduced by traditional find-and-replace algorithms.

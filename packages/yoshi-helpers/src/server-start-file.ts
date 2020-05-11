@@ -45,10 +45,12 @@ Please remove the flags and use these default entry points:
     );
   }
 
-  if (serverStartFile.split('.')[0] === 'index') {
+  if (path.basename(serverStartFile).split('.')[0] === 'index') {
     console.log(
       chalk.yellow(
-        `Deprecation warning: ${serverStartFile} is not going to be started automatically in Yoshi v5. Please create the entry poiont:
+        `Deprecation warning: ${path.basename(
+          serverStartFile,
+        )} is not going to be started automatically in Yoshi v5. Please create the entry poiont:
   - fullstack: index-dev.${extension}
   - client:    dev/server.${extension}`,
       ),

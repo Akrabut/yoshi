@@ -1,5 +1,42 @@
 # Changelog
 
+## 4.69.0 (2020-05-11)
+
+#### :rocket: New Feature
+
+- `yoshi-common`, `yoshi-flow-app`, `yoshi-flow-bm`, `yoshi-flow-editor`
+  - [#2353](https://github.com/wix/yoshi/pull/2353) Yoshi Server: add HMR support for new files ([@yanivefraim](https://github.com/yanivefraim))
+
+#### :bug: Bug Fix
+
+- `create-yoshi-app`
+  - [#2348](https://github.com/wix/yoshi/pull/2348) Prevent asking language for projects if only one is supported ([@yavorsky](https://github.com/yavorsky))
+
+#### :nail_care: Polish
+
+- `create-yoshi-app`, `yoshi-flow-bm-runtime`, `yoshi-flow-bm`
+  - [#2355](https://github.com/wix/yoshi/pull/2355) Split BM flow output bundles to selectively add deps ([@amitdahan](https://github.com/amitdahan))
+- `create-yoshi-app`, `yoshi-flow-bm`
+  - [#2358](https://github.com/wix/yoshi/pull/2358) Write module config file into `target` ([@amitdahan](https://github.com/amitdahan))
+- `create-yoshi-app`, `yoshi-flow-bm-runtime`
+  - [#2356](https://github.com/wix/yoshi/pull/2356) Make `react` a `peerDep` of `yoshi-flow-bm-runtime` ([@amitdahan](https://github.com/amitdahan))
+
+## 4.68.3 (2020-05-07)
+
+#### :building_construction: Templates
+
+- `create-yoshi-app`
+  - [#2337](https://github.com/wix/yoshi/pull/2337) Set `esModuleInterop` for all TypeScript templates ([@sidoruk-sv](https://github.com/sidoruk-sv))
+
+#### :bug: Bug Fix
+
+- `yoshi-common`
+  - [#2354](https://github.com/wix/yoshi/pull/2354) Verify that the `target` directory exists before writing the `server.log` ([@ranyitz](https://github.com/ranyitz))
+
+#### :memo: Documentation
+
+- [#2351](https://github.com/wix/yoshi/pull/2351) fix link to OOI docs ([@junkkerrigan](https://github.com/junkkerrigan))
+
 ## 4.68.2 (2020-05-07)
 
 #### :bug: Bug Fix

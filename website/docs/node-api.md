@@ -27,3 +27,9 @@ serve()
     console.log(errorReason);
   });
 ```
+
+### Monorepo
+
+In case you are using `yoshi-monorepo-flow` and want to serve all the apps in the monorepo, you can do so using the following api:
+
+TBD

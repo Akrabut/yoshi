@@ -91,8 +91,8 @@ export const isInsideGitRepo = (dir: string) => {
   }
 };
 
-export const OOI_TEMPLATE_NAME = 'flow-editor - Out of iFrame';
-export const PLATFORM_TEMPLATE_NAME = 'flow-editor - Platform App';
+export const OOI_TEMPLATE_NAME = 'flow-editor-ooi';
+export const PLATFORM_TEMPLATE_NAME = 'flow-editor-platform';
 
 export const isOutOfIframe = (str: string): boolean => {
   return str === OOI_TEMPLATE_NAME;

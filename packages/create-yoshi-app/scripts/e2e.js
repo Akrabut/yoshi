@@ -21,8 +21,8 @@ verifyRegistry();
 // add `${template}-typescript` to support legacy filter by title
 const templatesWithTitles = flatMap(templates, templateDefinition => {
   return [
-    { title: templateDefinition.name, ...templateDefinition },
-    { title: `${templateDefinition.name}-typescript`, ...templateDefinition },
+    { ...templateDefinition, title: templateDefinition.name },
+    { ...templateDefinition, title: `${templateDefinition.name}-typescript` },
   ];
 });
 

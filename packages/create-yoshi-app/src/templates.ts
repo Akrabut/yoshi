@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { TemplateDefinition } from './TemplateModel';
-import { OOI_TEMPLATE_NAME } from './utils';
+import { OOI_TEMPLATE_NAME, PLATFORM_TEMPLATE_NAME } from './utils';
 
 const toTemplatePath = (templateName: string) =>
   resolve(__dirname, '../templates', templateName);
@@ -56,7 +56,7 @@ if (process.env.EXPERIMENTAL_FLOW_EDITOR === 'true') {
 
 if (process.env.EXPERIMENTAL_PLATFORM_TEMPLATE === 'true') {
   templates.push({
-    name: 'flow-editor - Platform App',
+    name: PLATFORM_TEMPLATE_NAME,
     path: toTemplatePath('flow-editor-platform'),
     language: ['typescript'],
   });

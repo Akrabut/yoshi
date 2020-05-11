@@ -10,7 +10,7 @@ export default async (
   localAppModel: LocalAppTemplateModel,
 ): Promise<TemplateModel> => {
   const fallbackWithDefaultTemplate = () =>
-    new TemplateModel(getDefaultAnswers(localAppModel));
+    new TemplateModel(getDefaultAnswers(localAppModel.templateDefinition.name));
 
   const instance = await getInstance();
   if (instance) {

@@ -1,4 +1,5 @@
-import { isOutOfIframe } from '../utils';
+import { isOutOfIframe, isAppBuilder } from '../utils';
+import getDefaultAnswers from './getDefaultAnswers';
 import { ExtendedPromptObject } from './extended-prompts';
 import {
   createApp,
@@ -240,114 +241,113 @@ export default (): Array<ExtendedPromptObject<string>> => {
             {
               type: 'text',
               name: 'appName',
-              async after(answers) {
+              async after(answers, context) {
+                if (isAppBuilder(context.templateDefinition.name)) {
+                  answers.components = getDefaultAnswers(
+                    context.templateDefinition.name,
+                  ).components;
+                } else {
+                  answers.components = [];
+                }
                 return createApp(answers.appName);
               },
               validate(value: string) {
                 return !!value;
               },
               message: 'Name of the app:',
-            },
-            {
-              type: 'select',
-              name: 'registerComponentType',
-              message: 'Register a component',
-              before(answers) {
-                if (!answers.components) {
-                  answers.components = [];
-                }
-                return answers;
-              },
-              async getDynamicChoices(answers, context) {
+              next(answers, context) {
                 if (isOutOfIframe(context.templateDefinition.name)) {
                   return [
-                    { title: 'Register a Widget', value: WIDGET_OUT_OF_IFRAME },
-                    { title: 'Register a Page', value: PAGE_OUT_OF_IFRAME },
                     {
-                      title: 'Finish registration',
-                      value: null,
+                      type: 'select',
+                      name: 'registerComponentType',
+                      message: 'Register a component',
+                      choices: [
+                        {
+                          title: 'Register a Widget',
+                          value: WIDGET_OUT_OF_IFRAME,
+                        },
+                        { title: 'Register a Page', value: PAGE_OUT_OF_IFRAME },
+                        {
+                          title: 'Finish registration',
+                          value: null,
+                        },
+                      ],
+                      // isOutOfIframe(context.templateDefinition.name)
+                      repeatUntil(answers) {
+                        return !answers.registerComponentType;
+                      },
+                      next(answers) {
+                        if (answers.registerComponentType) {
+                          return [
+                            {
+                              type: 'text',
+                              name: 'componentName',
+                              format: val => val.split(/\s|-/).join(''),
+                              async after(answers, context) {
+                                if (!answers.components) {
+                                  answers.components = [];
+                                }
+                                if (!context.isViewerScriptRegistered) {
+                                  await createComponent({
+                                    name: 'Platform',
+                                    appId: answers.appId,
+                                    type: PLATFORM,
+                                    data: getDataForComponent(
+                                      generatePlatformComponentData(
+                                        context.projectName,
+                                      ),
+                                      PLATFORM,
+                                    ),
+                                  });
+                                  context.isViewerScriptRegistered = true;
+                                }
+                                answers.components = answers.components.concat(
+                                  await createComponent({
+                                    name: answers.componentName,
+                                    appId: answers.appId,
+                                    type: answers.registerComponentType,
+                                    data: getDataForComponent(
+                                      generateComponentData(
+                                        context.projectName,
+                                        answers.componentName,
+                                        answers.registerComponentType,
+                                      ),
+                                      answers.registerComponentType,
+                                    ),
+                                  }),
+                                );
+                                return answers;
+                              },
+                              validate(value: string) {
+                                return !!value;
+                              },
+                              message: `${
+                                answers.registerComponentType ===
+                                PAGE_OUT_OF_IFRAME
+                                  ? 'Page'
+                                  : 'Widget'
+                              } name`,
+                            },
+                          ];
+                        }
+                        if (answers.appRegistrationState === WILL_REGISTER) {
+                          console.log(
+                            [
+                              `Congrats! You just registered the ${answers.appName} app! 🚀`,
+                              `Dev Center url: https://dev.wix.com/dc3/my-apps/${answers.appId}/build/components`,
+                              'Next steps:',
+                              '  - Push the app to GitHub',
+                              '  - Add the app to LifeCycle',
+                              '  - Create a new Wix Site and Test your app via your App Page on the Dev Center',
+                              '  - Copy viewer and editor URLs to `dev/sites`',
+                            ].join('\n'),
+                          );
+                        }
+                        return [];
+                      },
                     },
                   ];
-                }
-                return [
-                  {
-                    title: 'Register a Widget',
-                    value: STUDIO_WIDGET,
-                  },
-                  {
-                    title: 'Finish registration',
-                    value: null,
-                  },
-                ];
-              },
-              repeatUntil(answers) {
-                return !answers.registerComponentType;
-              },
-              next(answers) {
-                if (answers.registerComponentType) {
-                  return [
-                    {
-                      type: 'text',
-                      name: 'componentName',
-                      format: val => val.split(/\s|-/).join(''),
-                      async after(answers, context) {
-                        if (!answers.components) {
-                          answers.components = [];
-                        }
-                        if (!context.isViewerScriptRegistered) {
-                          await createComponent({
-                            name: 'Platform',
-                            appId: answers.appId,
-                            type: PLATFORM,
-                            data: getDataForComponent(
-                              generatePlatformComponentData(
-                                context.projectName,
-                              ),
-                              PLATFORM,
-                            ),
-                          });
-                          context.isViewerScriptRegistered = true;
-                        }
-                        answers.components = answers.components.concat(
-                          await createComponent({
-                            name: answers.componentName,
-                            appId: answers.appId,
-                            type: answers.registerComponentType,
-                            data: getDataForComponent(
-                              generateComponentData(
-                                context.projectName,
-                                answers.componentName,
-                                answers.registerComponentType,
-                              ),
-                              answers.registerComponentType,
-                            ),
-                          }),
-                        );
-                        return answers;
-                      },
-                      validate(value: string) {
-                        return !!value;
-                      },
-                      message: `${
-                        answers.registerComponentType === PAGE_OUT_OF_IFRAME
-                          ? 'Page'
-                          : 'Widget'
-                      } name`,
-                    },
-                  ];
-                }
-                if (answers.appRegistrationState === WILL_REGISTER) {
-                  console.log(
-                    [
-                      `Congrats! You just registered the ${answers.appName} app! 🚀`,
-                      `Dev Center url: https://dev.wix.com/dc3/my-apps/${answers.appId}/build/components`,
-                      'Next steps:',
-                      '  - Push the app to GitHub',
-                      '  - Add the app to LifeCycle',
-                      '  - Create a new Wix Site and Test your app via your App Page on the Dev Center',
-                      '  - Copy viewer and editor URLs to `dev/sites`',
-                    ].join('\n'),
-                  );
                 }
                 return [];
               },

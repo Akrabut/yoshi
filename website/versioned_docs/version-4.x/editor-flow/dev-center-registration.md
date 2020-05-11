@@ -6,7 +6,7 @@ sidebar_label: Dev Center Registration
 
 > Note: Currently, dev center is new and not stable. You can't create an out of iframe app just using dev center. You have to use rpc calls to app service to configure correctly your widget.
 
-### Create your app
+### Register an app in dev center manually
 Initially, you probably need the app configured to work with your localhost. So all next examples are based on local configuration.
 
 Steps to register your app in dev center:

@@ -114,15 +114,23 @@
     },
     {
       "type": "doc",
-      "id": "version-4.x/editor-flow/dev-center-registration"
+      "id": "version-4.x/editor-flow/getting-started"
     },
     {
       "type": "doc",
-      "id": "version-4.x/editor-flow/migration-guide"
+      "id": "version-4.x/editor-flow/cli-API"
     },
     {
       "type": "doc",
-      "id": "version-4.x/editor-flow/editor-and-settings-apps"
+      "id": "version-4.x/editor-flow/structure-API"
+    },
+    {
+      "type": "doc",
+      "id": "version-4.x/editor-flow/runtime-API"
+    },
+    {
+      "type": "doc",
+      "id": "version-4.x/editor-flow/local-development"
     },
     {
       "type": "doc",

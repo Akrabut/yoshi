@@ -4,123 +4,46 @@ title: Editor Flow Overview
 sidebar_label: Editor Flow
 ---
 
-- [Overview](#overview)
-- [Initial Setup](#initial-setup)
-- [Local Development](#local-development)
-- [Testing](#testing)
-  - [Viewer App](#viewer-app)
-    - [E2E Against Production](#e2e-against-production)
-    - [SSR](#ssr)
-  - [Editor App & Settings Panel](#editor-app--settings-panel)
-    - [E2E Against Locally Served HTMLs](#e2e-against-locally-served-htmls)
-  - [Component & Unit Tests](#component--unit-tests)
-- [Deployment](#deployment)
-  - [Register an App in Wix's Dev Center](#register-an-app-in-wix-s-dev-center)
-  - [Deploy a new version](#deploy-a-new-version)
-- [OOI Development App](#ooi-development-app)
-
-## Overview
-> If you already has OOI experience and understand how it's working, just pass it to Local Development section.
-
-`out-of-iframe` is a code name for a platform that enables creating Wix Apps that lives in the Viewer's main frame. It's similar to the old TPA but should be more performant. For more information head to the [official docs](https://bo.wix.com/wix-docs/client/client-frameworks#out-of-iframe).
-
-For more info about current flow, take a look at the [RFC](https://github.com/wix/yoshi/issues/1489)
-
-**OOI app is constructed from 2 parts:**
-
-- **Viewer**
-> Can include single or multple widgets. For example, component with list of items and item page.
-Each widget contains of component (view) and controller (logic, runs on webWorker). All controllers are being collected in a single file called `viewerScript`.
-So the result will be `[:widgetName]ViewerWidget.js` (for ex `buttonViewerWidget`) for each widget and single `viewerScript.js` for the whole app. These files is located in `dist/statics` directory.
-
-- **Editor**
-> To preview viewer script in editor, it's not enough to provide viewerWidget. Currently platoform will create an iframe for you widget. So instead of js bundle, you have to prodive html file. It should be deprecated in future.
-Moreover, each of you widget should have Settings app. Here, you can provide ability for users to configure your widget. (color, logic, labels, etc).
-The result will be `editor.html` and `settings.html` for each of your widgets located in `dist/statics/editor/:widgetName.html` and `dist/statics/settings/:widgetName.html`.
+## Introduction to Out-Of-Iframe
+`out-of-iframe`(OOI) is a code name for a platform that enables creating Wix Apps that live in the Viewer's frame. It's similar to the old IFrame TPA but more performant. For more information head to the [official docs](https://bo.wix.com/wix-docs/client/client-frameworks#out-of-iframe).
 
 
-## Initial Setup
+### Environments
+Each OOI app is constructed from components which are being consumed by 2 environments:
 
-```
-create-yoshi-app
-> Your Name
-> Your Email
-> Editor FLow
-> Typescript or Babel
-```
+#### Viewer
+The component will be rendered in a single frame, like regular Single Page App. It's needed mostly for performance and environemnt consistency between different components.
 
-> Note: We will use .ts files as an example, but you can use .js ones if you picked Babel project
+We shouldn't show settings panel component here, but will load worker script under the hood. This worker is running in different thread via [Web Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) for performance purposes. Components won't block the main thread with heavy calculations, or requests handling.
 
-This will bootstrap project with simple components (button, text).
-Each component should contain 3 files:
-- Widget.ts - *Will be rendered in both viewer and editor*.
-- controller.ts - *Logical part of your widget running in WebWorker*
-- Settings.ts - *Settings pannel for widget in editor*.
+#### Editor
+Currently, applications that are OOI on the Viewer still run inside an iFrame on the Editor.
+We'll also emulate worker excecution, so components will act the same between editor and viewer parts.
+
+Moreover, we can have specific Settings Modal (Panel), which will allow users to configure the component. To preserve and share the component's configuration between OOI Widget and Settings we can use [PublicData API](https://dev.wix.com/api/iframe-sdk/sdk/wix.data.public#sdk_wix.data.public_wixdatapublic).
 
 
----
-**Configure chrome to allow invalid certificates for resources loaded from localhost**
+### Components
+Conceptually each component contains of `Widget` or `Page` (React Component rendered on both Viewer and Editor environments), `Settings Panel` (optional React Component rendered on Editor side) and `controller` ([Viewer platform controller](https://bo.wix.com/wix-docs/client/client-viewer-platform/articles/lifecycle#client-viewer-platform_articles_lifecycle_createcontrollers), that runs in both Viewer and Editor).
 
-> The viewer is running on `https`, thus we need to serve our application on `https` as well. Yoshi is using a self signed certificate which is `invalid` for chrome.
+### Editor Flow Concept
+The main idea of using specific yoshi flow for building Out-of-iFrame apps is to provide best development experience.
 
-Paste the following in Chrome's omnibox and change the highlighted flag from `Disabled` to `Enabled`.:
+By creating RFC for different features and trying to create a fruitfull discussion with community, we are able to save a lot of time for developers by providing solutions already based on best practices.
 
-```
-chrome://flags/#allow-insecure-localhost
-```
+Moreover, we are activelly contibuting to platform part if we see that some features are missing here to provide good development veolicty.
 
-## Local Development
+For example, by just running `yoshi-flow-editor start` we'll open both editor and viewer URLs with specific query params forcing platform to load your local bundles. So w/o additional configuration developers can start working on apps in production environment.
 
-**Develop your local app on production platforms**
+The only thing Editor Flow is requiring from users is to follow common convention. This convention requires having strictly organized file structure, almost the same [next.js framework](https://nextjs.org/) does.
 
-```
-npm start
-```
+**Does all these mean that I shouldn't communicate with platform and just work on regular React app?**
+It's our goal, but anyway you still need to use platform's API's. Our task is to create fully-typed and simple abstractions for it, so you'll work with additional APIs the most efficient way you can.
+For example, we can't get rid of PublicData at all, but we can provide some useful API using `get` / `set`, so you won't be obligated with writing a lot of boilerplate acress the app.
 
-This command runs `yoshi-flow-editor start` and opens two tabs:
+### Types of apps Editor Flow Support
+Currently we can support 2 types of apps: **Out of iFrame**  and **Platform** apps. 
+Each project can be mixed with OOI and Platform components on the same time. It's useful for projects, which consist of Out of iFrame components, but want to gradullay migrate some of it to studio widgets. On the same time, some projects can be already mixed, so we shouldn't separate scopes we are working on.
+Just running `yoshi-flow-editor start` can open a website containing installed both OOI and Platform Components with configured URL overrides to local bundles and HMR. Cool, right?
 
-1. Production **viewer** with a site that has the [ooi development app](#ooi-development-app), it points to your local _viewer script_ and _viewer widget_.
-
-2. Production **editor** with a site that has the [ooi development app](#ooi-development-app), It points to your local _editor app_ and _settings panel_.
-
-> Note: ooi-development-app is just an informative way to show how you can start your app in production environment. It's a pre-registered wix website with installed app pointed to localhost.
-After understanding basic concept, we recommend you to read [Dev-Center registraion section](#dev-center-registration) and register your app.
-
-## Dev-Center registration
-To register your app please read: [Register your app via Dev Center](./DEV_CENTER_REGISTRATION.md)
-
-#####After your app is registered
-- update viewer and editor urls under `dev/sites.js`
-- create/update `.component.json` which is located in each component's directory. This file should contain `id` field, which is pointing to appropriate widget registered on dev center.
-
-## Testing
-
-Run `npm start`, open another terminal and run `npx jest --watch`
-
-> Tip - If you are using `iterm2` use `cmd`+`d` to split the window vertically
-
-### Viewer App
-
-#### E2E Against Production
-
-Using the ooi development app that points to your local _viewer script_ and _viewer widget_.
-
-See [`viewerApp/viewerApp.e2e.js`](./src/viewerApp/viewerApp.e2e.js) for an example.
-
-#### SSR
-
-> TBD
-
-### Editor App & Settings Panel
-
-#### E2E Against Locally Served HTMLs
-
-When running tests, Yoshi runs your [`dev/server.js`](./dev/server.js) as configured in [`jest-yoshi.config.js`](./jest-yoshi.config.js).
-
-See [`editorApp/editorApp.e2e.js`](./src/editorApp/editorApp.e2e.js) & [`settingsPanel/settingsPanel.e2e.js`](./src/settingsPanel/settingsPanel.e2e.js) for an example.
-
-> Testing against the production editor similarly to the viewer app is problematic due to the editor loading time and required authentication.
-
-### Component & Unit Tests
-
-Nothing special about the ooi platform, component tests should be written in the `components` directory. Unit tests can be written everywhere.
+> It's a rare case and we didn't test mixed apps a lot, so on the initial stages it could be not stable enough, but we are trying to react lightning fast and happy to hear any feedback 🙂

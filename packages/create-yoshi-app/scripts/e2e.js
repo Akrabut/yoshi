@@ -7,6 +7,7 @@ const fs = require('fs');
 const mock = require('mock-require');
 
 const { verifyRegistry } = require('../src/index');
+const { isOutOfIframe } = require('../src/utils');
 const TemplateModel = require('../src/TemplateModel').default;
 const { publishMonorepo } = require('../../../scripts/utils/publishMonorepo');
 const { testRegistry } = require('../../../scripts/utils/constants');
@@ -96,9 +97,7 @@ const testTemplate = mockedAnswers => {
     // in the describe block will run first!
     it('step 1: should generate project successfully', async () => {
       mockAppData(mockedAnswers);
-      if (
-        mockedAnswers.templateDefinition.name === 'flow-editor - Out of iFrame'
-      ) {
+      if (isOutOfIframe(mockedAnswers.templateDefinition.name)) {
         mockFlowData(
           mockedAnswers.templateDefinition.title,
           'WIDGET_OUT_OF_IFRAME',

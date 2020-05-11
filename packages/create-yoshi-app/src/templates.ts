@@ -1,5 +1,6 @@
 import { resolve } from 'path';
 import { TemplateDefinition } from './TemplateModel';
+import { OOI_TEMPLATE_LABEL } from './utils';
 
 const toTemplatePath = (templateName: string) =>
   resolve(__dirname, '../templates', templateName);
@@ -47,7 +48,7 @@ if (process.env.EXPERIMENTAL_FLOW_BM === 'true') {
 
 if (process.env.EXPERIMENTAL_FLOW_EDITOR === 'true') {
   templates.push({
-    name: 'flow-editor - Out of iFrame',
+    name: OOI_TEMPLATE_LABEL,
     path: toTemplatePath('flow-editor'),
     language: ['typescript'],
   });

@@ -1,3 +1,4 @@
+import { isOutOfIframe } from '../utils';
 import { ExtendedPromptObject } from './extended-prompts';
 import {
   createApp,
@@ -258,10 +259,7 @@ export default (): Array<ExtendedPromptObject<string>> => {
                 return answers;
               },
               async getDynamicChoices(answers, context) {
-                if (
-                  context.templateDefinition.name ===
-                  'flow-editor - Out of iFrame'
-                ) {
+                if (isOutOfIframe(context.templateDefinition.name)) {
                   return [
                     { title: 'Register a Widget', value: WIDGET_OUT_OF_IFRAME },
                     { title: 'Register a Page', value: PAGE_OUT_OF_IFRAME },

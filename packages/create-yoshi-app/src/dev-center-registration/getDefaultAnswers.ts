@@ -1,7 +1,8 @@
 import LocalAppTemplateModel from '../TemplateModel';
+import { isOutOfIframe } from '../utils';
 
 export default (localAppModel: LocalAppTemplateModel) => {
-  if (localAppModel.templateDefinition.name === 'flow-editor - Out of iFrame') {
+  if (isOutOfIframe(localAppModel.templateDefinition.name)) {
     return {
       appId: 'fda9208a-85a4-4482-9f43-59599773e998',
       appName: 'Editor flow test app',

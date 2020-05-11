@@ -7,7 +7,7 @@ const fs = require('fs');
 const mock = require('mock-require');
 
 const { verifyRegistry } = require('../src/index');
-const { isOutOfIframe } = require('../src/utils');
+const { isOutOfIframe, isAppBuilder } = require('../src/utils');
 const TemplateModel = require('../src/TemplateModel').default;
 const { publishMonorepo } = require('../../../scripts/utils/publishMonorepo');
 const { testRegistry } = require('../../../scripts/utils/constants');

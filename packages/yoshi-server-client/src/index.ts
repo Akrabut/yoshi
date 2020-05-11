@@ -10,7 +10,7 @@ import { createHeaders } from '@wix/headers';
 import { joinUrls } from './utils';
 
 type Options = {
-  baseUrl?: string;
+  baseUrl: string;
 };
 
 export interface HttpClient {
@@ -31,7 +31,11 @@ const fetch = unfetch;
 export default class implements HttpClient {
   private baseUrl: string;
 
-  constructor({ baseUrl = '/' }: Options = {}) {
+  constructor(
+    { baseUrl }: Options = {
+      baseUrl: `/_api/${process.env.packageName}`,
+    },
+  ) {
     this.baseUrl = baseUrl;
   }
 

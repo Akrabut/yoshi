@@ -27,8 +27,7 @@ exports[`CommonEditorScriptEntry template generates correct template with entry 
   if (editorScriptEntry.eventHandler) {
     builder = builder.withEventHandler(editorScriptEntry.eventHandler);
   }
-  builder = builder.withWidget(require(project/src/components/a/editor.controller.ts));
-  }
+  builder = builder.withWidget(require(\\"project/src/components/a/editor.controller.ts\\"));
   editorScriptEntry = builder.build();
   
 
@@ -53,10 +52,9 @@ exports[`CommonEditorScriptEntry template generates correct template with entry 
   if (editorScriptEntry.eventHandler) {
     builder = builder.withEventHandler(editorScriptEntry.eventHandler);
   }
-  builder = builder.withWidget(require(project/src/components/a/editor.controller.ts));
-  builder = builder.withWidget(require(project/src/components/c/editor.controller.ts));
-  builder = builder.withWidget(require(project/src/components/d/editor.controller.ts));
-  }
+  builder = builder.withWidget(require(\\"project/src/components/a/editor.controller.ts\\"));
+  builder = builder.withWidget(require(\\"project/src/components/c/editor.controller.ts\\"));
+  builder = builder.withWidget(require(\\"project/src/components/d/editor.controller.ts\\"));
   editorScriptEntry = builder.build();
   
 

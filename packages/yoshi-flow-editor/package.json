@@ -42,5 +42,8 @@
     "@wix/wix-bootstrap-testkit": "^1.1.3955",
     "@wix/wix-config-emitter": "^1.0.1395",
     "@wix/wix-http-testkit": "^1.0.1318"
+  },
+  "peerDependencies": {
+    "@wix/bob-widget-services": "^1.30.0",
   }
 }

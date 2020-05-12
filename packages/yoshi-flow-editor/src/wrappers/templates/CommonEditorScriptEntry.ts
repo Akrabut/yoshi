@@ -30,10 +30,9 @@ export default t<Opts>`
   ${controllersMeta
     .map(
       meta =>
-        `builder = builder.withWidget(require(${meta.controllerFileName}));`,
+        `builder = builder.withWidget(require("${meta.controllerFileName}"));`,
     )
     .join('\n  ')}
-  }
   editorScriptEntry = builder.build();
   `
       : ''}

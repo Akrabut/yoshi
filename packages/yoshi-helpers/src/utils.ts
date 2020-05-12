@@ -113,7 +113,7 @@ function getDirectoryOfProcessById(pid: number) {
     })
     .toString()
     .trim();
-}
+};
 
 const getCommandArgByPid = (pid: number, argIndex = 0) => {
   return childProcess

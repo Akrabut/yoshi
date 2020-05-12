@@ -44,6 +44,6 @@
     "@wix/wix-http-testkit": "^1.0.1318"
   },
   "peerDependencies": {
-    "@wix/bob-widget-services": "^1.30.0",
+    "@wix/bob-widget-services": "^1.30.0"
   }
 }

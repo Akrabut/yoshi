@@ -108,7 +108,7 @@ export const getProcessIdOnPort = (port: number) => {
 
 function getDirectoryOfProcessById(pid: number) {
   return childProcess
-    .execSync(`lsof -p ${pid} | grep cwd | awk '{print $9}'`, {
+    .execSync(`lsof -p ${pid} | grep cwd | awk '{print substr($0, index($0,$9))}'`, {
       encoding: 'utf-8',
     })
     .toString()

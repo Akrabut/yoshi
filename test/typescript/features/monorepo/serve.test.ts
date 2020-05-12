@@ -1,4 +1,4 @@
-import monorepoServe from 'yoshi-flow-monorepo/build/serve';
+import monorepoServe from 'yoshi-flow-monorepo/serve';
 import Scripts from '../../../scripts';
 
 const scripts = Scripts.setupProjectFromTemplate({

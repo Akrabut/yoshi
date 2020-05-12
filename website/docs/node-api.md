@@ -30,6 +30,16 @@ serve()
 
 ### Monorepo
 
-In case you are using `yoshi-monorepo-flow` and want to serve all the apps in the monorepo, you can do so using the following api:
+In case you are using `yoshi-flow-monorepo` and want to serve all the apps in the monorepo, you can do so using the following api:
 
-TBD
+```javascript
+const serve = require("yoshi-flow-monorepo/serve");
+
+serve()
+  .then(() => {
+    console.log("All Servers and CDNs started successfully");
+  })
+  .catch(errorReason => {
+    console.log(errorReason);
+  });
+```

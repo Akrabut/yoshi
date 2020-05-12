@@ -33,7 +33,7 @@ export default class implements HttpClient {
 
   constructor(
     { baseUrl }: Options = {
-      baseUrl: `/_api/${process.env.packageName}`,
+      baseUrl: `/_api/${process.env.PACKAGE_NAME}`,
     },
   ) {
     this.baseUrl = baseUrl;

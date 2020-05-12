@@ -13,11 +13,7 @@ const { environment } = require('./environment');
     app.stop();
   };
 
-  const signals: Array<'SIGINT' | 'SIGUSR1' | 'SIGUSR2'> = [
-    'SIGINT',
-    'SIGUSR1',
-    'SIGUSR2',
-  ];
+  const signals = ['SIGINT', 'SIGUSR1', 'SIGUSR2'];
 
   signals.forEach(ev => process.on(ev, stopTestKit));
 

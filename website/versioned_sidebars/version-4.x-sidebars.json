@@ -134,6 +134,10 @@
     },
     {
       "type": "doc",
+      "id": "version-4.x/editor-flow/testing"
+    },
+    {
+      "type": "doc",
       "id": "version-4.x/editor-flow/platform-apps-support"
     }
   ]

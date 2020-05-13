@@ -106,7 +106,7 @@ export const getProcessIdOnPort = (port: number) => {
     .trim();
 };
 
-function getDirectoryOfProcessById(pid: number) {
+const getDirectoryOfProcessById = (pid: number) => {
   return childProcess
     .execSync(
       `lsof -p ${pid} | grep cwd | awk '{print substr($0, index($0,$9))}'`,
@@ -116,7 +116,7 @@ function getDirectoryOfProcessById(pid: number) {
     )
     .toString()
     .trim();
-}
+};
 
 const getCommandArgByPid = (pid: number, argIndex = 0) => {
   return childProcess
